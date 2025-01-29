@@ -24,6 +24,14 @@ const static char * TAG = "MAIN";
     PRINTF_COLOR(ANSI_MAGENTA, "[%s:%d]", __FILE__, __LINE__);\
     PRINTF_COLOR(color, format_string, ##__VA_ARGS__);
 
+
+#define PRINT_GUSTAV(color, format_string, ...)\
+    PRINTF_COLOR(color, format_string, ##__VA_ARGS__)
+
+
+
+
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "Hello World for my %d time", NEW_WORLD_COUNT);
@@ -34,6 +42,10 @@ void app_main(void)
                                 "t";
 
     PRINTF_COLOR(ANSI_RED, "%s"NEW_LINE, test_string);
+
+    PRINT_GUSTAV(ANSI_YELLOW, "Gustav %s", NEW_LINE);
+    
+    PRINT_GUSTAV(ANSI_MAGENTA, "Anton %skan inte %s%s%s", ANSI_RESET, ANSI_GREEN, "sova.", NEW_LINE);
 
     PRINTF_GROUP_1("Hello World %d" NEW_LINE, NEW_WORLD_COUNT);
 
