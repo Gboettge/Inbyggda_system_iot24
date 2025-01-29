@@ -16,11 +16,20 @@ const static char * TAG = "MAIN";
 #define PRINTF_COLOR(color, format_string, ...) \
 printf("%s" format_string "%s", color, ##__VA_ARGS__, ANSI_RESET)
 
+#define PRINTF_GROUP_1(format, ...)\
+PRINTF_COLOR(ANSI_BLUE, "Group 1 ");\
+PRINTF_COLOR(ANSI_RESET, format, ##__VA_ARGS__)
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "Hello World for my %d time", NEW_WORLD_COUNT);
     
-    const char * test_string = "test";
+    const char * test_string =  "t"
+                                "e"
+                                "s"
+                                "t";
 
     PRINTF_COLOR(ANSI_RED, "%s"NEW_LINE, test_string);
+
+    PRINTF_GROUP_1("Hello World %d" NEW_LINE, NEW_WORLD_COUNT);
 }
