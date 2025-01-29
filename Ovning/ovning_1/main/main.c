@@ -9,6 +9,9 @@ const static char * TAG = "MAIN";
 #define ANSI_BLUE "\033[0;34m"
 #define ANSI_MAGENTA "\033[0;35m"
 #define ANSI_CYAN "\033[0;36m"
+#define ANSI_CYAN "\033[0;36m"
+#define ANSI_HCYAN "\e[0;96m" //high intensity cyan
+#define ANSI_BHCYAN "\e[1;96m" //BOLD high intensity cyan
 #define ANSI_RESET "\033[0m"
 #define NEW_LINE "\n"
 #define NEW_WORLD_COUNT 1
@@ -45,7 +48,7 @@ void app_main(void)
 
     PRINT_GUSTAV(ANSI_YELLOW, "Gustav %s", NEW_LINE);
     
-    PRINT_GUSTAV(ANSI_MAGENTA, "Anton %skan inte %s%s%s", ANSI_RESET, ANSI_GREEN, "sova.", NEW_LINE);
+    PRINT_GUSTAV(ANSI_MAGENTA, "Anton %skan inte %s%s%s", ANSI_BHCYAN, ANSI_GREEN, "sova.", NEW_LINE);
 
     PRINTF_GROUP_1("Hello World %d" NEW_LINE, NEW_WORLD_COUNT);
 
