@@ -10,12 +10,17 @@ const static char * TAG = "MAIN";
 #define ANSI_MAGENTA "\033[0;35m"
 #define ANSI_CYAN "\033[0;36m"
 #define ANSI_RESET "\033[0m"
+#define NEW_LINE "\n"
+#define NEW_WORLD_COUNT 1
+
+#define PRINTF_COLOR(color, format_string, ...) \
+printf("%s" format_string "%s", color, ##__VA_ARGS__, ANSI_RESET)
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Hello World for my %d time", 1);
+    ESP_LOGI(TAG, "Hello World for my %d time", NEW_WORLD_COUNT);
     
     const char * test_string = "test";
 
-    printf("%s%s%s", ANSI_CYAN, test_string, ANSI_RESET "\n");
+    PRINTF_COLOR(ANSI_RED, "%s"NEW_LINE, test_string);
 }
