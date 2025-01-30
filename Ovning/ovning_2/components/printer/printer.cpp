@@ -26,16 +26,18 @@ namespace ovning_2
         char * color[3] = {cyan, yellow, red};
         int result;
 
-        while (start != stop){
+        while (start != stop+1){
             index = index % 3;
             result = time * time; 
-            time++;
             PRINTF_COLOR(color[index], "%d" NEW_LINE, time);
+            time++;
             index++; 
             start++;
             vTaskDelay(pdMS_TO_TICKS(1000));
-
         }
 
+    }
+    int multiply(int a, int b){
+        return a * b;
     }
 }

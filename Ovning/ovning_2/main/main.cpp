@@ -13,6 +13,9 @@ extern "C"
         ESP_LOGI("Main", " gor value %d", a);
 
         ovning_2::printNumbers(1, 10);
-        ovning_2::takeTimeAndPrintEverySecond(0);
+        ovning_2::takeTimeAndPrintEverySecond(-10);
+       // ovning_2::multiply(7, 8);
+       
+        PRINTF_COLOR(ANSI_MAGENTA, "%d" NEW_LINE, ovning_2::multiply(7,8));
     }
 }
