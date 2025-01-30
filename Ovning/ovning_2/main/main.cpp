@@ -7,7 +7,9 @@ extern "C"
 {
 void app_main(void)
 {
-    int a = func();
+    int a = ovning_2::func();
+    ESP_LOGI("Main", " gor value %d", a);
+    a = inbyggda_iot24::func();
     ESP_LOGI("Main", " gor value %d", a);
 }
 }
