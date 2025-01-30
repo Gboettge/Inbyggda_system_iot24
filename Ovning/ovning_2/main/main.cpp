@@ -13,5 +13,6 @@ extern "C"
         ESP_LOGI("Main", " gor value %d", a);
 
         ovning_2::printNumbers(1, 10);
+        ovning_2::takeTimeAndPrintEverySecond(0);
     }
 }

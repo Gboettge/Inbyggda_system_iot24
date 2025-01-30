@@ -20,5 +20,6 @@
 namespace ovning_2
 {
     int func(void);
-    int printNumbers(int start, int stop);
+    void printNumbers(int start, int stop);
+    void takeTimeAndPrintEverySecond(int time);
 }

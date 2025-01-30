@@ -7,13 +7,35 @@ namespace ovning_2
     {
         return 2;
     }
-    int printNumbers(int start, int stop)
+    void printNumbers(int start, int stop)
     {
         while (start != stop+1){
             PRINTF_COLOR(ANSI_BHCYAN, "%d" NEW_LINE, start);
             start ++;
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            vTaskDelay(pdMS_TO_TICKS(200));
         }
-        return 0;
+    }
+    void takeTimeAndPrintEverySecond(int time)
+    {
+        int index = 0;
+        int start = 0;
+        int stop = 20;
+        char * cyan = ANSI_HCYAN;
+        char * yellow = ANSI_YELLOW;
+        char * red = ANSI_RED;
+        char * color[3] = {cyan, yellow, red};
+        int result;
+
+        while (start != stop){
+            index = index % 3;
+            result = time * time; 
+            time++;
+            PRINTF_COLOR(color[index], "%d" NEW_LINE, time);
+            index++; 
+            start++;
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+        }
+
     }
 }
