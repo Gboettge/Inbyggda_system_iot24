@@ -11,5 +11,7 @@ extern "C"
         ESP_LOGI("Main", " gor value %d", a);
         a = inbyggda_iot24::func();
         ESP_LOGI("Main", " gor value %d", a);
+
+        ovning_2::printNumbers(1, 10);
     }
 }
