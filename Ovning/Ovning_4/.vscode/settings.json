@@ -4,11 +4,6 @@
     "idf.openOcdConfigs": [
         "board/esp32c6-ftdi.cfg"
     ],
-    "idf.toolsPathWin": "C:\\Users\\Gustav\\.espressif",
     "idf.portWin": "COM8",
-    "files.associations": {
-        "gpio.h": "c",
-        "esp_err.h": "c"
-    },
-    "idf.flashType": "UART"
+    "idf.toolsPathWin": "C:\\Users\\Gustav\\.espressif"
 }
