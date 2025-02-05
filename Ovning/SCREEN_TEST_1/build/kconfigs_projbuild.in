@@ -1,0 +1,6 @@
+source "C:/Users/Gustav/esp/v5.4/esp-idf/components/bootloader/Kconfig.projbuild"
+source "C:/Users/Gustav/esp/v5.4/esp-idf/components/esp_app_format/Kconfig.projbuild"
+source "C:/Users/Gustav/esp/v5.4/esp-idf/components/esp_rom/Kconfig.projbuild"
+source "C:/Users/Gustav/esp/v5.4/esp-idf/components/esptool_py/Kconfig.projbuild"
+source "C:/Users/Gustav/esp/v5.4/esp-idf/components/partition_table/Kconfig.projbuild"
+source "C:/repos/Inbyggda_system_iot24/Ovning/SCREEN_TEST_1/main/Kconfig.projbuild"
