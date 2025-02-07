@@ -12,6 +12,8 @@
 #define TWDT_TIMEOUT_MS         3000
 #define TASK_RESET_PERIOD_MS    2000
 #define MAIN_DELAY_MS           10000
+#define IDLE_CORE_0_BIT         0b01
+#define IDLE_core_1_BIT         0b10
 void knappFan()
 {  
     //int knapp = BTN_PRESS;
@@ -29,11 +31,14 @@ void knappFan()
         }
     }
 }
+
 void app_main(void)
 {
     esp_task_wdt_config_t twdt_config = {
         .timeout_ms = TWDT_TIMEOUT_MS,
-        .idle_core_mask = (1 << CONFIG_FREERTOS_NUMBER_OF_CORES) - 1, // Bitmask of all cores
+        //.idle_core_mask = (1 << CONFIG_FREERTOS_NUMBER_OF_CORES) - 1, // Bitmask of all cores
+        .idle_core_mask = IDLE_CORE_0_BIT | IDLE_core_1_BIT, // Bitmask of all cores
+        
         .trigger_panic = false,
     };
     

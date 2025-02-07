@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "SCREEN_TEST_1",
-    "project_version":    "88105bc",
+    "project_version":    "baacd75-dirty",
     "project_path":       "C:/repos/Inbyggda_system_iot24/Ovning/SCREEN_TEST_1",
     "idf_path":           "C:/Users/Gustav/esp/v5.4/esp-idf",
     "build_dir":          "C:/repos/Inbyggda_system_iot24/Ovning/SCREEN_TEST_1/build",
