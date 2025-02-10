@@ -6,7 +6,9 @@
     ],
     "idf.toolsPathWin": "C:\\Users\\Gustav\\.espressif",
     "files.associations": {
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "button.h": "c"
     },
-    "idf.portWin": "COM8"
+    "idf.portWin": "COM8",
+    "idf.flashType": "UART"
 }

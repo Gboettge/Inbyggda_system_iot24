@@ -3,17 +3,22 @@
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 
-typedef struct BUTTON{
+typedef enum {
+    GPIO_PULLUP,
+    GPIO_PULLDOWN 
+}strapping_mode;
+
+typedef struct {
     int pin;
+    strapping_mode mode;
+    int latch;
+    bool pressed;
+} button;
 
+typedef button* button_handle;
 
-} BUTTON;
+button_handle button_init(int pin, strapping_mode pull);
 
-void init_button(pin, x);
+void update(button_handle button);
 
-void update(xxx);
-
-bool isPressed (xxx);
-
-void setOnPressed ( void(*onPressed)(int pin));
-
+bool isPressed (button_handle button);
