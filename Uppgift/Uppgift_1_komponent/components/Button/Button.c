@@ -23,14 +23,14 @@ button_handle button_init(int pin, strapping_mode mode){
 // 10ms max per uppdatering
 void update(button_handle button){
     button->pressed = gpio_get_level(button->pin); // tar inte bort debounce
-
+    
     if (button->pressed && !button->latch){
         //button->pressed = true;
         button->latch = 1;
         printf("%d\n", button->pressed);
         return;
     }
-    if (!button->pressed && button->latch){
+    else if (!button->pressed && button->latch){
         //button->pressed = false;
         button->latch = 0;
         printf("%d\n", button->pressed);
