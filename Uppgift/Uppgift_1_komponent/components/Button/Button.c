@@ -45,6 +45,10 @@ bool isPressed (button_handle button){
     return button->pressed;
 }
 
+void setOnPressed (void (*onPressed)(int pin)){
+    
+}
+
 
 // int init_button(pin, int x);
 

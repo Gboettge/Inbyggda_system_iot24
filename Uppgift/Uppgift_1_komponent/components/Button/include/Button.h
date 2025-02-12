@@ -22,3 +22,5 @@ button_handle button_init(int pin, strapping_mode pull);
 void update(button_handle button);
 
 bool isPressed (button_handle button);
+
+void setOnPressed (void (*onPressed)(int pin));
