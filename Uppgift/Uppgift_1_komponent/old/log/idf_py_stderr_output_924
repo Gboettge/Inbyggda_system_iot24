@@ -1,0 +1,38 @@
+CMake Error at C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/component.cmake:228 (message):
+  CMake Warning (dev) at build_properties.temp.cmake:8:
+
+    Syntax Warning in cmake code at column 106
+
+  
+
+    Argument not separated from preceding token by whitespace.
+
+  Call Stack (most recent call first):
+
+    C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/scripts/component_get_requirements.cmake:3 (include)
+
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+
+
+  CMake Error at
+  C:/repos/Inbyggda_system_iot24/Uppgift/Uppgift_1_komponent/components/Button/CMakeLists.txt:5:
+
+
+    Parse error.  Expected "(", got unquoted argument with text "example:".
+
+  Call Stack (most recent call first):
+
+    C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/scripts/component_get_requirements.cmake:107 (include)
+    C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/scripts/component_get_requirements.cmake:160 (__component_get_requirements)
+
+  
+
+
+
+Call Stack (most recent call first):
+  C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/build.cmake:644 (__component_get_requirements)
+  C:/Users/Gustav/esp/v5.4/esp-idf/tools/cmake/project.cmake:710 (idf_build_process)
+  CMakeLists.txt:8 (project)
+
+
