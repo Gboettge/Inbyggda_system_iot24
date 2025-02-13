@@ -9,7 +9,8 @@ button_handle button_init(int pin, strapping_mode mode){
     new_button->mode = mode;
     new_button->latch = 0;
     new_button->pressed = false;
-    new_button->onpressed = NULL;
+    new_button->onPressed = NULL;
+    new_button->onReleased = NULL;
     gpio_input_enable(pin);
     gpio_intr_disable(pin);
 
@@ -47,6 +48,7 @@ void button_update(button_handle button)
         {
             button->next_state = DEBOUNCE_STATE_ON;
             button->debounce_tick = current_tick;
+            
         }
         break;
     case DEBOUNCE_STATE_ON:
@@ -54,12 +56,12 @@ void button_update(button_handle button)
         if (current_tick - button->debounce_tick >= pdMS_TO_TICKS(30))
         {
             button->next_state = STATE_OFF;
-            if (button->onpressed != NULL)
+            if (button->onReleased != NULL)
             {
-                button->onpressed(button->pin);
+                button->onReleased(button->pin);
             }
             else {
-                printf("pressed %d\n", button->pressed);
+                printf("Non function button: %d released \n", button->pin);
             }
         }
         break;
@@ -76,15 +78,22 @@ void button_update(button_handle button)
         if (current_tick - button->debounce_tick >= pdMS_TO_TICKS(30))
         {
             button->next_state = STATE_ON;
+            if (button->onPressed != NULL)
+            {
+                button->onPressed(button->pin);
+            }
+            else {
+                printf("Non function button: %d Pressed \n", button->pin);
+            }
         }
         break;
     default:
         printf("error %d\n", button->current_state);
         break;
     }
-    if(button->next_state != button->current_state){
-        printf("%d -> %d\n", button->current_state, button->next_state);
-    }
+    // if(button->next_state != button->current_state){
+    //     printf("%d -> %d\n", button->current_state, button->next_state);
+    // }
     button->previous_state = button->current_state;
     button->current_state = button->next_state;
 }
@@ -93,16 +102,28 @@ bool button_isPressed (button_handle button){
     return button->pressed;
 }
 
+void button_setOnReleased (button_handle button, void(*onReleased)(int pin)){
+    button->onReleased = onReleased;
+}
 void button_setOnPressed (button_handle button, void(*onPressed)(int pin)){
-    button->onpressed = onPressed;
+    button->onReleased = onPressed;
 }
 
 void button_print_press_num (int pin){
-    printf ("Button: %d pressed\n", pin);
+    printf ("Button: %d pressed.\n", pin);
 }
 
 void button_print_num_x_ten(int pin){
     printf ("Button: %d x 10 = %d\n", pin, pin * 10);
+}
+
+void button_print_released(int pin){
+    printf ("Button: %d released\n", pin);
+}
+
+
+void button_destroy(button_handle button){
+    button->pin = 0;
 }
 
 
@@ -112,7 +133,7 @@ void button_print_num_x_ten(int pin){
 
 // bool isPressed (int xxx);
 
-// void setOnPressed ( void(*onPressed)(int pin));
+// void setonReleased ( void(*onReleased)(int pin));
 /*
 moving average filter (mjukvaru filter)
 lista
@@ -144,8 +165,8 @@ void button_update(button_handle button)
             button->pressed = true;
         }
 
-        if (button->onpressed != NULL)
-            button->onpressed(button->pin);
+        if (button->onReleased != NULL)
+            button->onReleased(button->pin);
         else
             printf("pressed %d\n", button->pressed);
         return;

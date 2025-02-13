@@ -21,7 +21,8 @@ typedef struct {
     strapping_mode mode;
     int latch;
     bool pressed;
-    void (*onpressed)(int pin);
+    void (*onPressed)(int pin);
+    void (*onReleased)(int pin);
     state_e current_state;
     state_e next_state;
     state_e previous_state;
@@ -37,8 +38,14 @@ void button_update(button_handle button);
 
 bool button_isPressed (button_handle button);
 
+void button_setOnReleased (button_handle button, void(*onReleased)(int pin));
+
 void button_setOnPressed (button_handle button, void(*onPressed)(int pin));
 
 void button_print_press_num (int pin);
 
 void button_print_num_x_ten(int pin);
+
+void button_print_released(int pin);
+
+void button_destroy(button_handle button);
