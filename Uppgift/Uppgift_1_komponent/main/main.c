@@ -21,7 +21,7 @@ void app_main(void)
     
      while(1)
      {
-         vTaskDelay(pdMS_TO_TICKS(10));
+         vTaskDelay(pdMS_TO_TICKS(20));
          button_update(btn1);
          button_update(btn2);
          button_update(btn3);

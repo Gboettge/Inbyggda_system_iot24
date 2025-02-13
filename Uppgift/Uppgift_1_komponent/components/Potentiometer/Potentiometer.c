@@ -1,7 +1,4 @@
 #include <stdio.h>
 #include "Potentiometer.h"
 
-void func(void)
-{
-
-}
+pot_handle potentiometer_init(int pin);
