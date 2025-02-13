@@ -48,4 +48,4 @@ void button_print_num_x_ten(int pin);
 
 void button_print_released(int pin);
 
-void button_destroy(button_handle button);
+void button_destroy(button_handle *button);

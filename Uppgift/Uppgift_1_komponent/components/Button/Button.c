@@ -4,7 +4,7 @@
 
 button_handle button_init(int pin, strapping_mode mode){
 
-    button_handle new_button = malloc (sizeof(button));
+    button_handle new_button = pvPortMalloc (sizeof(button));
     new_button->pin = pin;
     new_button->mode = mode;
     new_button->latch = 0;
@@ -106,7 +106,7 @@ void button_setOnReleased (button_handle button, void(*onReleased)(int pin)){
     button->onReleased = onReleased;
 }
 void button_setOnPressed (button_handle button, void(*onPressed)(int pin)){
-    button->onReleased = onPressed;
+    button->onPressed = onPressed;
 }
 
 void button_print_press_num (int pin){
@@ -122,8 +122,8 @@ void button_print_released(int pin){
 }
 
 
-void button_destroy(button_handle button){
-    button->pin = 0;
+void button_destroy(button_handle *button){
+    vPortFree(button);
 }
 
 
