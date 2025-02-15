@@ -11,6 +11,7 @@ typedef struct {
     adc_oneshot_unit_handle_t adc1_handle_t;
     adc_oneshot_unit_init_cfg_t unit_init_t;
     adc_oneshot_chan_cfg_t chan_conf_t;  //fortsätt här
+    adc_channel_t channel;
     int value;
     int threshold;
     bool risingEdge;
