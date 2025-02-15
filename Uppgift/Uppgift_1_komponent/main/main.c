@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Button.h"
 #include "Potentiometer.h"
-#define GP 
+
 
 button_handle btn1;
 button_handle btn2;
@@ -20,10 +20,11 @@ void app_main(void)
     button_setOnPressed(btn2, button_print_num_x_ten);
     button_setOnReleased(btn1, button_print_released);
     button_setOnReleased(btn2, button_print_released);
+    pot_setOnThreshold(adc, 3000, pot_printHello);
     
      while(1)
      {
-         vTaskDelay(pdMS_TO_TICKS(3000));
+         vTaskDelay(pdMS_TO_TICKS(200));
          pot_update(adc);
          button_update(btn1);
          button_update(btn2);
