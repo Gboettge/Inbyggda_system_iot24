@@ -11,29 +11,23 @@ pot_handle potentiometer_init(adc_unit_t unit, adc_channel_t channel){
         ESP_LOGE(TAG, "Memory allocation failed");
         return NULL;
     }
-    newPot->adc_unit = unit;
-    newPot->channel = channel;
-    newPot->value = 0;
-    newPot->threshold = 0;
-    newPot->risingEdge = false;
-    //newPot->onThreshold = NULL;
-    newPot->init_config.unit_id = unit;
-    //newPot->adc_handle =
-    printf("Pot init success, channel: %d\n", channel);
-    esp_err_t adc_oneshot_new_unit(const adc_oneshot_unit_init_cfg_t *init_config, adc_oneshot_unit_handle_t *ret_unit);
+    newPot->unit_init_t.clk_src = 0;
+    newPot->unit_init_t.ulp_mode = ADC_ULP_MODE_DISABLE;
+    newPot->unit_init_t.unit_id = unit;
+    adc_oneshot_new_unit(&newPot->unit_init_t, &newPot->adc1_handle_t);
+    //adc_oneshot_del_unit(newPot->adc1_handle);
     return newPot;
 }
 
 void pot_update(pot_handle pot)
 {
-    // pot->channel_config, &(pot->adc_raw
-    if (pot != NULL)
-    {
-        
-        pot->value = adc_oneshot_read(pot->adc_handle, pot->channel, &(pot->value));
-        printf("%d", pot->value);
+    printf("Hello\n");
+    esp_err_t err = adc_oneshot_read(pot->adc1_handle_t, pot->unit_init_t.unit_id, &(pot->value));
+    if (err == ESP_OK) {
+        printf("ADC Value: %d\n", pot->value);
+    } else {
+        printf("ADC read error: %d\n", err);
     }
-    
 }
 
 int pot_get_value(pot_handle pot)
@@ -42,6 +36,7 @@ int pot_get_value(pot_handle pot)
             return 0;
         return pot->value;
     }
+
 
 
 

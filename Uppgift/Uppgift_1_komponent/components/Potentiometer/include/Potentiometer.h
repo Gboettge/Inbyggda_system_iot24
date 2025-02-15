@@ -3,16 +3,20 @@
 #include "esp_log.h"
 #include "esp_adc/adc_oneshot.h"
 #include "esp_err.h"
+#include "hal/adc_types.h"
 
 
 typedef struct {
-    adc_unit_t adc_unit;
-    adc_channel_t channel;
+    //adc_unit_t adc_unit;
+    adc_oneshot_unit_handle_t adc1_handle_t;
+    adc_oneshot_unit_init_cfg_t unit_init_t;
+    adc_oneshot_chan_cfg_t chan_conf_t;  //fortsätt här
     int value;
     int threshold;
     bool risingEdge;
-    adc_oneshot_unit_init_cfg_t init_config;
-    adc_oneshot_unit_handle_t adc_handle;
+    void (*onThreshold)(int pin, int value);
+    
+
 } pot_t;
 
 typedef pot_t* pot_handle;

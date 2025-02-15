@@ -11,7 +11,7 @@ pot_handle adc;
 void app_main(void)
 {
     printf("Starting main\n");
-    adc = potentiometer_init(1, ADC_CHANNEL_0);
+    adc = potentiometer_init(ADC_UNIT_1, ADC_CHANNEL_1);
     btn1 = button_init(GPIO_NUM_15, GPIO_PULLUP);
     btn2 = button_init(GPIO_NUM_5, GPIO_PULLDOWN);
     btn3 = button_init(GPIO_NUM_20, GPIO_PULLDOWN);
@@ -23,11 +23,11 @@ void app_main(void)
     
      while(1)
      {
-         vTaskDelay(pdMS_TO_TICKS(100));
+         vTaskDelay(pdMS_TO_TICKS(3000));
+         pot_update(adc);
          button_update(btn1);
          button_update(btn2);
          button_update(btn3);
-         pot_update(adc);
      }
      void button_destroy(button_handle *btn1);
      void button_destroy(button_handle *btn2);
