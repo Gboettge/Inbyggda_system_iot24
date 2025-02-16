@@ -67,7 +67,7 @@ void pot_setOnThreshold(pot_handle pot, int threshold, void(*onThreshold)(adc_ch
     pot->onThreshold = onThreshold;
 }
 
-void pot_printHello(adc_channel_t channel, int value){
+void pot_printThresholdReach(adc_channel_t channel, int value){
     printf("Threshold reached! Channel: %d, Value: %d\n", channel, value);
 }
 

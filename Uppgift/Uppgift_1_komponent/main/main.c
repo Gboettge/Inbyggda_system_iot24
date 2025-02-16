@@ -20,7 +20,7 @@ void app_main(void)
     button_setOnPressed(btn2, button_print_num_x_ten);
     button_setOnReleased(btn1, button_print_released);
     button_setOnReleased(btn2, button_print_released);
-    pot_setOnThreshold(adc, 3000, pot_printHello);
+    pot_setOnThreshold(adc, 3000, pot_printThresholdReach);
     
      while(1)
      {
