@@ -28,6 +28,7 @@ void app_main(void)
          button_update(btn1);
          button_update(btn2);
          button_update(btn3);
+         
      }
      void button_destroy(button_handle *btn1);
      void button_destroy(button_handle *btn2);
