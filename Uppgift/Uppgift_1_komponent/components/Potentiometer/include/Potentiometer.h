@@ -34,4 +34,6 @@ void pot_setOnThreshold(pot_handle pot, int threshold, void(*onThreshold)(adc_ch
 /*                                                     bool risingEdge,*/
 void pot_printThresholdReach(adc_channel_t channel, int value);
 
+void pot_destroy(button_handle *pot);
+
 // xxx setOnThreshold ( int threshold, bool risingEdge, xxx (*onThreshold)(int pin/adc, value, xxx), xxx )
