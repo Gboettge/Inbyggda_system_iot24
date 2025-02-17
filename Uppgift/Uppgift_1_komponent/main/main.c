@@ -2,7 +2,6 @@
 #include "Button.h"
 #include "Potentiometer.h"
 
-
 button_handle btn1;
 button_handle btn2;
 button_handle btn3;
