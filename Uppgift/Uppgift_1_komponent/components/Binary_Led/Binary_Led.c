@@ -99,3 +99,7 @@ void b_led_blink(Bin_LED_handle LED, int milisecOn, int milisecOff){
     LED->milisecOn = milisecOn;
     LED->milisecOff = milisecOff;
 }
+
+void b_led_destroy(Bin_LED_handle *led){
+    vPortFree(led);
+}
