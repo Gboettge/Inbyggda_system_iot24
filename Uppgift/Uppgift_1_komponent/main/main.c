@@ -16,23 +16,25 @@ void app_main(void)
     btn1 = button_init(GPIO_NUM_15, GPIO_PULLUP);
     btn2 = button_init(GPIO_NUM_5, GPIO_PULLDOWN);
     btn3 = button_init(GPIO_NUM_20, GPIO_PULLDOWN);
-    bLed = b_led_init(GPIO_NUM_14);
+    bLed = b_led_init(GPIO_NUM_14, LIGHT_OFF, false);
     
     button_setOnPressed(btn1, button_print_press_num);
     button_setOnPressed(btn2, button_print_num_x_ten);
     button_setOnReleased(btn1, button_print_released);
     button_setOnReleased(btn2, button_print_released);
     pot_setOnThreshold(adc, 3000, pot_printThresholdReach);
+    //b_led_setLed(bLed, LIGHT_ON);
+    b_led_blink(bLed, 500, 3000);
+   
     
      while(1)
      {
-         vTaskDelay(pdMS_TO_TICKS(200));
-         pot_update(adc);
+         vTaskDelay(pdMS_TO_TICKS(20));
+         //pot_update(adc);
          button_update(btn1);
          button_update(btn2);
          button_update(btn3);
          b_led_update(bLed);
-
 
      }
      void button_destroy(button_handle *btn1);
