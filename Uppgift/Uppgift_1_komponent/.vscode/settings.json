@@ -11,6 +11,6 @@
         "stdio.h": "c",
         "potentiometer.h": "c"
     },
-    "idf.portWin": "COM3",
+    "idf.portWin": "COM8",
     "idf.flashType": "UART"
 }
