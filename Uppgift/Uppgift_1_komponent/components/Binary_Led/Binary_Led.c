@@ -4,7 +4,7 @@
 Bin_LED_handle b_led_init(int pin, b_led_light_e light_mode, bool blink){
     Bin_LED_handle newLED = pvPortMalloc (sizeof(Bin_LED));
    
-
+    
     newLED->pin = pin;
     newLED->level = 0;
     newLED->milisecOn = 0;
