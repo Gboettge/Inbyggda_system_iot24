@@ -32,7 +32,7 @@ void app_main(void)
     pot_setOnThreshold(adc, 3000, pot_printThresholdReach);
     
     b_led_setled(b_Led, LIGHT_ON);
-    b_led_blink(b_Led, 50, 550);
+    //b_led_blink(b_Led, 50, 550);
 
     
     a_led_setLed(a_Led, 4000);
