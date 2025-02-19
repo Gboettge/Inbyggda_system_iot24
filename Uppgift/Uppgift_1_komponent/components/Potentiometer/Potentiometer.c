@@ -48,7 +48,7 @@ void pot_update(pot_handle pot)
     //esp_err_t err = adc_oneshot_read(pot->adc1_handle_t, pot->unit_init_t.unit_id, &(pot->value));
     esp_err_t err = adc_oneshot_read(pot->adc1_handle_t, pot->channel, &(pot->value));
     if (err == ESP_OK) {
-        printf("ADC Value: %d\n", pot->value);
+        //printf("ADC Value: %d\n", pot->value);
     } else {
         printf("ADC read error: %d\n", err);
     }

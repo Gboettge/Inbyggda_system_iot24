@@ -5,6 +5,7 @@
 
 typedef struct{
     bool sin;
+    float t;
     int period;
     uint32_t max_duty;
     uint32_t duty;

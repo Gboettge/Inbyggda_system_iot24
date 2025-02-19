@@ -2,13 +2,14 @@
 #include <math.h>
 #include "Analog_Led.h"
 
-float t = 0.0;
+
 
 a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer)
 {
     a_led_handle newLED = pvPortMalloc (sizeof(a_led));
     newLED->sin = false;
     newLED->max_duty = MAX_DUTY;
+    newLED->t = 0.0;
 
     
     newLED->ledcTimerConfig.clk_cfg = LEDC_AUTO_CLK;
@@ -38,11 +39,13 @@ a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer)
 void a_led_update(a_led_handle led){
     if (led->sin == true)
     {
-        float sin_value = sinf(t); // returns -1 to 1
+        float sin_value = sinf(led->t); // returns -1 to 1
         int duty = (int)(sin_value * (MAX_DUTY/2)) + (MAX_DUTY/2);
-        a_led_setLed(led, duty);
-        printf("duty: %d\n", duty); //
-        t += (M_PI) / led->period; 
+        led->duty = duty;
+        ledc_set_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel, led->duty);
+        ledc_update_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel);
+        //printf("duty: %d\n", duty); //
+        led->t += (2*M_PI) / led->period; 
         return;
     }
     if (led->previousDuty == led->duty)
@@ -56,21 +59,20 @@ void a_led_update(a_led_handle led){
         ledc_set_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel, led->duty);
         ledc_update_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel);
     }
+    else if (led == NULL) {
+        printf("LED handle is NULL!\n");
+        return;
+    }
    
 }
 
 void a_led_setLed(a_led_handle led, uint32_t duty)
 {
-    if (led == NULL) {
-        printf("LED handle is NULL!\n");
-        return;
-    }
     if (duty > MAX_DUTY){
         duty = MAX_DUTY;
     }
     led->duty = duty;
-    ledc_set_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel, duty);
-    ledc_update_duty(led->ledcChannelConfig.speed_mode, led->ledcChannelConfig.channel);
+    led->sin = false;
 }
 
 void a_led_sin(a_led_handle led, int period){

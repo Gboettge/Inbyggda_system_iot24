@@ -38,7 +38,7 @@ void b_led_update(b_led_handle led)
         led->next_state = ON;
         //led->light_mode = LIGHT_OFF;
         if(led->ledON == true){
-            printf("ledON == true\n");
+            //printf("ledON == true\n");
             led->next_state = BLINK_ON;
         }
         break;
@@ -47,7 +47,7 @@ void b_led_update(b_led_handle led)
         
         if(current_tick - led->tick_elapse >= pdMS_TO_TICKS(led->milisecOn))
         {
-            printf("\n\n");
+            //printf("\n\n");
             led->next_state = BLINK_OFF;
             led->tick_elapse = current_tick;
             //led->tick_elapse = 0;
@@ -62,7 +62,7 @@ void b_led_update(b_led_handle led)
     case BLINK_OFF:
         if(current_tick - led->tick_elapse >= pdMS_TO_TICKS(led->milisecOff))
         {
-        printf("\n\n");
+        //printf("\n\n");
         led->next_state = BLINK_ON;
         led->tick_elapse = current_tick;
         //led->tick_elapse = 0;
@@ -76,9 +76,9 @@ void b_led_update(b_led_handle led)
         printf("error %d\n", led->current_state);
         break;
     }
-    if(led->next_state != led->current_state){
-         printf("%d -> %d\n", led->current_state, led->next_state);
-    }
+    // if(led->next_state != led->current_state){
+    //      printf("%d -> %d\n", led->current_state, led->next_state);
+    // }
     led->previous_state = led->current_state;
     led->current_state = led->next_state;
 }
