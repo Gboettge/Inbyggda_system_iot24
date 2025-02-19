@@ -10,7 +10,8 @@
         "button.h": "c",
         "stdio.h": "c",
         "potentiometer.h": "c",
-        "analog_led.h": "c"
+        "analog_led.h": "c",
+        "binary_led.h": "c"
     },
     "idf.portWin": "COM8",
     "idf.flashType": "UART"
