@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Components"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"gpio.h": "c",
+			"button.h": "c",
+			"stdio.h": "c",
+			"potentiometer.h": "c",
+			"analog_led.h": "c",
+			"binary_led.h": "c"
+		}
+	}
+}
