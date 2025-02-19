@@ -1,7 +1,7 @@
 #include "driver/ledc.h" 
 //#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
-#define MAX_DUTY 1096
+#define MAX_DUTY 4096
 
 typedef struct{
     bool sin;
@@ -15,10 +15,12 @@ typedef struct{
 
 typedef a_led* a_led_handle;
 
-a_led_handle a_led_init(int pin, ledc_channel_t channel);
+a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer);
 
 void a_led_update(a_led_handle led);
 
 void a_led_setLed(a_led_handle led, uint32_t duty);
 
 void a_led_sin(a_led_handle led, int period);
+
+void a_led_destroy(a_led_handle *led);

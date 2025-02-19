@@ -26,16 +26,16 @@ typedef struct{
     b_led_state_e previous_state;
     TickType_t tick_elapse;
     
-}Bin_LED;
+}b_led_s;
 
-typedef Bin_LED* Bin_LED_handle;
+typedef b_led_s* b_led_handle;
 
-Bin_LED_handle b_led_init(int pin,b_led_light_e mode, bool blink);
+b_led_handle b_led_init(int pin,b_led_light_e mode, bool blink);
 
-void b_led_update(Bin_LED_handle LED);
+void b_led_update(b_led_handle led);
 
-void b_led_setLed(Bin_LED_handle LED, b_led_light_e light_mode);
+void b_led_setled(b_led_handle led, b_led_light_e light_mode);
 
-void b_led_blink(Bin_LED_handle LED, int milisecOn, int milisecOff);
+void b_led_blink(b_led_handle led, int milisecOn, int milisecOff);
 
-void b_led_destroy(Bin_LED_handle *led);
+void b_led_destroy(b_led_handle *led);
