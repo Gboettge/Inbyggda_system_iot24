@@ -4,7 +4,7 @@
 
 
 
-a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer)
+a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer, int hpoint)
 {
     a_led_handle newLED = pvPortMalloc (sizeof(a_led));
     newLED->sin = false;
@@ -25,7 +25,7 @@ a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer)
     newLED->ledcChannelConfig.channel = channel;
     newLED->ledcChannelConfig.duty = 0;
     newLED->ledcChannelConfig.flags.output_invert = 0;
-    newLED->ledcChannelConfig.hpoint = 0;
+    newLED->ledcChannelConfig.hpoint = hpoint;
     newLED->ledcChannelConfig.intr_type = LEDC_INTR_DISABLE;
     newLED->ledcChannelConfig.speed_mode = LEDC_LOW_SPEED_MODE;
     newLED->ledcChannelConfig.sleep_mode = LEDC_SLEEP_MODE_NO_ALIVE_NO_PD;

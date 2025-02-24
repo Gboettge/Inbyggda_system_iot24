@@ -16,7 +16,7 @@ typedef struct{
 
 typedef a_led* a_led_handle;
 
-a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer);
+a_led_handle a_led_init(int pin, ledc_channel_t channel, ledc_timer_t timer, int hpoint);
 
 void a_led_update(a_led_handle led);
 

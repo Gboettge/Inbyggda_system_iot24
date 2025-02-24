@@ -14,7 +14,8 @@
 			"stdio.h": "c",
 			"potentiometer.h": "c",
 			"analog_led.h": "c",
-			"binary_led.h": "c"
+			"binary_led.h": "c",
+			"cstdint": "cpp"
 		}
 	}
 }

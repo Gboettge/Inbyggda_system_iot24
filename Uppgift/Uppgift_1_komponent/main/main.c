@@ -30,9 +30,9 @@ void app_main(void)
     btn3 = button_init(GPIO_NUM_21, GPIO_PULLDOWN);
     
     // b_Led = b_led_init(GPIO_NUM_9, LIGHT_OFF, false);
-    red = a_led_init(2,0,0);
-    green = a_led_init(3,1,0);
-    blue = a_led_init(4,2,0);
+    red = a_led_init(2,2,2, 3000);
+    green = a_led_init(3,1,1, 2000);
+    blue = a_led_init(4,0,0, 0);
     
     button_setOnPressed(btn1, changeRed);
     button_setOnPressed(btn2, changeGreen);
@@ -50,9 +50,9 @@ void app_main(void)
     a_led_setLed(red, 0);
     a_led_setLed(green, 0);
 
+    a_led_sin(green, 300); //
     a_led_sin(red, 300); //
-    a_led_sin(green, 400); //
-    //a_led_sin(blue, 300);
+    a_led_sin(blue, 300);
     
     
     int adc_value;//
@@ -88,7 +88,7 @@ void app_main(void)
 
 
 void changeRed(){
-    value += 400;
+    value += 800;
     if (value > 4050){
         
         value = 0;
@@ -99,7 +99,7 @@ void changeRed(){
 }
 
 void changeGreen(){
-    green_value += 400;
+    green_value += 800;
     if (green_value > 4050){
         
         green_value = 0;
@@ -109,7 +109,7 @@ void changeGreen(){
     a_led_setLed(green, green_value); //
 }
 void changeBlue(){
-    blue_value += 400;
+    blue_value += 800;
     if (blue_value > 4050){
 
         blue_value = 0;
