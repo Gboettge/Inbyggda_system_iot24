@@ -1,0 +1,16 @@
+CONFIGURATION
+
+xxx init(xxx)
+Ladda alla parametrar från NVS
+
+char* getDeviceName (xxx ) 
+Returnera device name parameter från arbetsminne
+
+char* getSerialNumber (xxx) 
+Returnera serial number parameter från arbetsminne
+
+xxx setDeviceName (char *) 
+Kopiera in nytt device name till arbetsminne och spara på nvs
+
+xxx setSerialNumber (char *) 
+Kopiera in nytt serial number till arbetsminne och spara på nvs
