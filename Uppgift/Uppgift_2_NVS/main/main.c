@@ -9,7 +9,7 @@ void app_main(void)
     //getDeviceName(&nvs);
     setDeviceName(nsd, "Gustav");
     //getDeviceName(&nvs);
-    char* deviceName = getDeviceName(nsd);
+    char * deviceName = getDeviceName(nsd);
     
     
     ESP_LOGI(TAG, "%s", deviceName);

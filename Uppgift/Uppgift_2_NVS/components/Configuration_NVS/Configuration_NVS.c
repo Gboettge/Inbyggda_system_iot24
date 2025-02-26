@@ -3,54 +3,47 @@
 
 
  myNvs_handle *nvs_init(){
-    //myNvs_handle handle;
+    nvs_handle_t handle;
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
+        
     }
     ESP_ERROR_CHECK(err);
-
+    err= nvs_open(KEY_DEVICE_NAME, NVS_READWRITE, &handle);
+    
     myNvs_handle * newNvs = malloc(sizeof(myNvs_handle));
+
     newNvs->deviceName ="";
     newNvs->serialNumber = "";
+    // nvs_commit(handle);
+    newNvs->handle = handle;
+    
     //newNvs->handle = handle;
     return newNvs;
     
 }
 
 char* getDeviceName(myNvs_handle *nvs){
-    size_t required_size;
+    
+    size_t required_size = STR_LENGHT;
     esp_err_t err;
     printf("%s\n", nvs->deviceName);
     err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, NULL, &required_size);
     ESP_ERROR_CHECK(err);
     if (err != ESP_OK)
     {
-        // strcpy(nvs->deviceName, "ESP32_Default");
         ESP_LOGE(TAG, "Device name not found, using default: %s", nvs->deviceName);
-        ESP_LOGE(TAG, "s: %d", err);
-
-        // ESP_ERROR_CHECK(nvs_commit(nvs->handle));
-        // ss
     }
-    //char *deviceName = nvs->deviceName
-    nvs->deviceName = malloc(required_size);
     if(nvs->deviceName == NULL){
-        printf("Error");
+        printf("Error\n");
     }
-
-    err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, nvs->deviceName, &required_size);
-    // nvs_get_str(my_handle, "server_name", NULL, &required_size);
-    // nvs_get_str(my_handle, "server_name", server_name, &required_size);
-    // char *deviceName = malloc(required_size);
-    // if (!deviceName)
-    // {
-        //     ESP_LOGE(TAG, "Memory allocation failed");
-        //     return NULL;
-        // }
-        
+    else{
+        nvs->deviceName = malloc(required_size);
+        err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, nvs->deviceName, &required_size);
+    }
     return nvs->deviceName;
 }
 
@@ -66,7 +59,7 @@ void setDeviceName(myNvs_handle *nvs, char * name){
     nvs_commit(nvs->handle);
     ESP_LOGI(TAG, "Updated Device Name: %s", name);
 
-    nvs_close(nvs->handle); 
+    //nvs_close(nvs->handle); 
 }
 
 void nvsDestroy(myNvs_handle *nvs){
