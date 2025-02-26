@@ -5,8 +5,13 @@
 myNvs_handle nvs;
 void app_main(void)
 {
-    nvs_init();
-    getDeviceName(nvs);
-    setDeviceName("Gustav");
-    getDeviceName(nvs);
+    myNvs_handle *nsd = nvs_init();
+    //getDeviceName(&nvs);
+    setDeviceName(nsd, "Gustav");
+    //getDeviceName(&nvs);
+    char* deviceName = getDeviceName(nsd);
+    
+    
+    ESP_LOGI(TAG, "%s", deviceName);
+    nvsDestroy(nsd);
 }

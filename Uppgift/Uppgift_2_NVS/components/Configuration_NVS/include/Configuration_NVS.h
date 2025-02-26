@@ -6,25 +6,28 @@
 
 
 #define MAX_PARAM_LENGTH 32
-#define STR_LENGHT 64
+#define STR_LENGHT 16
 #define KEY_DEVICE_NAME "keyDevice"
 #define KEY_SERIAL_NUMBER "keySerial"
 
 static const char * TAG = "NVS";
 
 typedef struct {
+        char* deviceName;
+        char* serialNumber;
         nvs_handle_t handle;
     } myNvs_handle;
 
 // typedef myNvs_t* myNvs_handle;
 
-void nvs_init();
+myNvs_handle *nvs_init();
 
-char* getDeviceName(myNvs_handle nvs);
+char* getDeviceName(myNvs_handle *nvs);
 char* getSerialNumber(myNvs_handle nvs);
-void setDeviceName(char * name);
+void setDeviceName(myNvs_handle *nvs, char * name);
 void setSerialNumber(char * number);
 
+void nvsDestroy(myNvs_handle *nvs);
 
 
 
