@@ -4,12 +4,13 @@
 #include "nvs_flash.h"
 #include <string.h>
 
+
 #define MAX_PARAM_LENGTH 32
 #define STR_LENGHT 64
 #define KEY_DEVICE_NAME "keyDevice"
 #define KEY_SERIAL_NUMBER "keySerial"
 
-const char *TAG = "NVS";
+static const char * TAG = "NVS";
 
 typedef struct {
         nvs_handle_t handle;
