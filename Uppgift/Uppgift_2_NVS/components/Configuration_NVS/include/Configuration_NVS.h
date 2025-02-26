@@ -23,11 +23,12 @@ typedef struct {
 myNvs_handle *nvs_init();
 
 char* getDeviceName(myNvs_handle *nvs);
-char* getSerialNumber(myNvs_handle nvs);
+char* getSerialNumber(myNvs_handle *nvs);
 void setDeviceName(myNvs_handle *nvs, char * name);
-void setSerialNumber(char * number);
+void setSerialNumber(myNvs_handle *nvs, char * number);
 
-void nvsDestroy(myNvs_handle *nvs);
+void nvsDestroy();
+void nvsClose(myNvs_handle *nvs);
 
 
 

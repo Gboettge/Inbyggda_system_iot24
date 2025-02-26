@@ -1,17 +1,24 @@
 #include <stdio.h>
 #include "Configuration_NVS.h"
+#include "freertos/FreeRTOS.h"
 
 
-myNvs_handle nvs;
+myNvs_handle *nvs;
 void app_main(void)
 {
-    myNvs_handle *nsd = nvs_init();
-    //getDeviceName(&nvs);
-    setDeviceName(nsd, "Gustav");
-    //getDeviceName(&nvs);
-    char * deviceName = getDeviceName(nsd);
+    nvs = nvs_init();
+    //setSerialNumber(nvs, "31a412xy9");
+    //setDeviceName(nvs, "Gustav");
+    char * serialNumber = getSerialNumber(nvs);
+    char * deviceName = getDeviceName(nvs);
+   
     
     
-    ESP_LOGI(TAG, "%s", deviceName);
-    nvsDestroy(nsd);
+    
+    
+    ESP_LOGI("NVS main ", "number: %s", serialNumber);
+    ESP_LOGI(TAG, "name: %s", deviceName);
+    
+    nvsClose(nvs);
+    //nvsDestroy();
 }
