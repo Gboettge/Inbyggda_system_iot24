@@ -7,8 +7,8 @@ myNvs_handle *nvs;
 void app_main(void)
 {
     nvs = nvs_init();
-    //setSerialNumber(nvs, "31a412xy9");
-    //setDeviceName(nvs, "Gustav");
+    setSerialNumber(nvs, "31a412xy9");
+    setDeviceName(nvs, "Gustav");
     char * serialNumber = getSerialNumber(nvs);
     char * deviceName = getDeviceName(nvs);
    

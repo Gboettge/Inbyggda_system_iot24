@@ -2026,7 +2026,7 @@ Discarded input sections
  .text.esp_get_minimum_free_heap_size
                 0x00000000       0x14 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .rodata.esp_get_idf_version.str1.4
-                0x00000000        0x5 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
+                0x00000000        0xb esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .text.esp_get_idf_version
                 0x00000000        0xa esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .text          0x00000000        0x0 esp-idf/esp_system/libesp_system.a(brownout.c.obj)
@@ -6745,14 +6745,14 @@ Discarded input sections
                 0x00000000       0x70 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .bss.s_adc_cali_param
                 0x00000000       0x10 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
- .debug_info    0x00000000     0x392b esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
+ .debug_info    0x00000000     0x3919 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .debug_abbrev  0x00000000      0x399 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .debug_loc     0x00000000      0x36e esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .debug_aranges
                 0x00000000       0x70 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .debug_ranges  0x00000000       0x60 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .debug_line    0x00000000      0xc83 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
- .debug_str     0x00000000     0x2b1c esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
+ .debug_str     0x00000000     0x2af2 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .comment       0x00000000       0x30 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
  .note.GNU-stack
                 0x00000000        0x0 esp-idf/esp_hw_support/libesp_hw_support.a(adc_share_hw_ctrl.c.obj)
@@ -9301,14 +9301,14 @@ Discarded input sections
                 0x00000000       0x1d esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .sdata.s_previous_init_code
                 0x00000000        0x4 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
- .debug_info    0x00000000     0x2015 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
+ .debug_info    0x00000000     0x2003 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .debug_abbrev  0x00000000      0x410 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .debug_loc     0x00000000      0x989 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .debug_aranges
                 0x00000000       0x80 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .debug_ranges  0x00000000      0x100 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .debug_line    0x00000000      0xc52 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
- .debug_str     0x00000000     0x190b esp-idf/hal/libhal.a(adc_hal_common.c.obj)
+ .debug_str     0x00000000     0x18e1 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .comment       0x00000000       0x30 esp-idf/hal/libhal.a(adc_hal_common.c.obj)
  .note.GNU-stack
                 0x00000000        0x0 esp-idf/hal/libhal.a(adc_hal_common.c.obj)

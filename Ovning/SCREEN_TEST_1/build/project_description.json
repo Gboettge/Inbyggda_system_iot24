@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "SCREEN_TEST_1",
-    "project_version":    "baacd75-dirty",
+    "project_version":    "b5a741b-dirty",
     "project_path":       "C:/repos/Inbyggda_system_iot24/Ovning/SCREEN_TEST_1",
     "idf_path":           "C:/Users/Gustav/esp/v5.4/esp-idf",
     "build_dir":          "C:/repos/Inbyggda_system_iot24/Ovning/SCREEN_TEST_1/build",
@@ -11,7 +11,7 @@
     "app_elf":            "SCREEN_TEST_1.elf",
     "app_bin":            "SCREEN_TEST_1.bin",
     "build_type":         "flash_app",
-    "git_revision":       "v5.4",
+    "git_revision":       "v5.4-dirty",
     "target":             "esp32c6",
     "rev":                "",
     "min_rev":            "0",
