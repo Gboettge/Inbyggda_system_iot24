@@ -5,4 +5,4 @@
 cmake_minimum_required(VERSION 3.5)
 set(EXTRA_COMPONENT_DIRS /repos/Inbyggda_system_iot24/Components)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(Övning_8_freeRTOS)
+project(Ovning_8_freeRTOS)
