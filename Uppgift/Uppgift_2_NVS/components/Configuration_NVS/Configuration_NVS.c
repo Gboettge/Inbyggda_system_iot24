@@ -2,9 +2,12 @@
 #include "Configuration_NVS.h"
 
 
- myNvs_handle *nvs_init(){
+myNvs_handle *nvs_init(){
+    // vTaskDelay(pdMS_TO_TICKS(1000));
     nvs_handle_t handle;
+    // ESP_ERROR_CHECK(nvs_flash_erase());          //för test
     esp_err_t err = nvs_flash_init();
+    
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -12,102 +15,143 @@
         
     }
     ESP_ERROR_CHECK(err);
-    err= nvs_open(KEY_DEVICE_NAME, NVS_READWRITE, &handle);
-    err= nvs_open(KEY_SERIAL_NUMBER, NVS_READWRITE, &handle);
-    
+    err= nvs_open("Device info", NVS_READWRITE, &handle);
+    if(err == ESP_ERR_NVS_NOT_FOUND || err == ESP_ERR_NVS_NOT_INITIALIZED){
+        ESP_LOGI(TAG, "No key found");
+    }
     myNvs_handle * newNvs = malloc(sizeof(myNvs_handle));
-//    // myNvs_handle *newNvs;
 
-    newNvs->deviceName = "0";
-    newNvs->serialNumber = "0";
+    size_t required_size;
+    // char* newName;
+    err = nvs_get_str(handle, KEY_DEVICE_NAME, NULL, &required_size);
+    char *newName = malloc(required_size);
+    nvs_get_str(handle, KEY_DEVICE_NAME, newName, &required_size);
+    if(err != ESP_OK)
+    {
+        newNvs->deviceName = NULL;
+    }
+    else{
+        newNvs->deviceName = newName;
+        // free(newName);
+    }
     
+    err = nvs_get_str(handle, KEY_SERIAL_NUMBER, NULL, &required_size);
+    char *newNumber = malloc(required_size);
+    nvs_get_str(handle, KEY_SERIAL_NUMBER, newNumber, &required_size);
+    if(err != ESP_OK)
+    {
+        newNvs->serialNumber = NULL;
+    }
+    else{
+        newNvs->serialNumber = newNumber;
+        //free(newNumber);
+    }
     
-    newNvs->handle = handle;
-    
-    nvs_set_str(handle, KEY_DEVICE_NAME, "None");
-    nvs_commit(handle);
-    nvs_set_str(handle, KEY_SERIAL_NUMBER, "0");
-    nvs_commit(handle);
+    nvs_close(handle);
+    // vTaskDelay(pdMS_TO_TICKS(500));
     return newNvs;
     
 }
 
-char* getDeviceName(myNvs_handle *nvs){
-    
-    size_t required_size = STR_LENGHT;
+void setDeviceName(myNvs_handle *nvs, char * name){
+    if(strlen(name) > STR_LENGTH){
+        ESP_LOGI(TAG, "name is to long, using previous..");
+        return;
+    }
+    size_t required_size;
+    nvs_handle_t handle;
+    // vTaskDelay(pdMS_TO_TICKS(1000));
     esp_err_t err;
-    
-
-    err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, NULL, &required_size); 
-
+    err = nvs_open("Device info", NVS_READWRITE, &handle);
     ESP_ERROR_CHECK(err);
-   
-    //err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, NULL, &required_size);
     if (err != ESP_OK)
     {
-        ESP_LOGE(TAG, "Device name not found, using default: %s", nvs->deviceName);
+        ESP_LOGE(TAG, "Failed to open NVS namespace");
+        return;
     }
+    
+    err = nvs_set_str(handle, KEY_DEVICE_NAME, name);
+    nvs_get_str(handle, KEY_DEVICE_NAME, NULL, &required_size); // memcopy bättre för behöver inte hämta från nvs
+    char *newName = malloc(sizeof(&required_size));
+    nvs_get_str(handle, KEY_DEVICE_NAME, newName, &required_size);
+
+    // nvs_find_key()
+    
+    free(nvs->deviceName);
+    nvs->deviceName = newName;
+
+    // vTaskDelay(pdMS_TO_TICKS(1000));
+    
+   
+    nvs_commit(handle);
+
+    ESP_LOGI(TAG, "Set device name: %s", name);
+
+    nvs_close(handle);
+}
+
+void setSerialNumber(myNvs_handle *nvs, char *number)
+{
+    if(strlen(number) > STR_LENGTH){
+        ESP_LOGI(TAG, "number is to long, using previous..");
+        return;
+    }
+    size_t required_size;
+    nvs_handle_t handle;
+    
+    esp_err_t err;
+    err = nvs_open("Device info", NVS_READWRITE, &handle);
+    ESP_ERROR_CHECK(err);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Failed to open NVS namespace");
+        return;
+    }
+    
+    // vTaskDelay(pdMS_TO_TICKS(1000));
+    
+    err = nvs_set_str(handle, KEY_SERIAL_NUMBER, number);
+    nvs_get_str(handle, KEY_SERIAL_NUMBER, NULL, &required_size);
+    char *newNumber = malloc(sizeof(&required_size));
+    nvs_get_str(handle, KEY_SERIAL_NUMBER, newNumber, &required_size);
+    // strlen(number);
+    // strcpy(newNumber, number)
+    free(nvs->serialNumber);
+    nvs->serialNumber = newNumber;
+
+    nvs_commit(handle);
+    ESP_LOGI(TAG, "Set serial number: %s", number);
+
+    nvs_close(handle);
+}
+
+
+char *getDeviceName(myNvs_handle *nvs)
+{
     if(nvs->deviceName == NULL){
-        printf("Error\n");
+        ESP_LOGI(TAG,"No name set, using name: Default");
+        return "Default";
     }
-    else{
-        nvs->deviceName = malloc(required_size);
-        err= nvs_get_str(nvs->handle, KEY_DEVICE_NAME, nvs->deviceName, &required_size);
-    }
-    //printf("test: %s\n", nvs->deviceName);
     return nvs->deviceName;
+    // printf("test: %s\n", nvs->deviceName);
 }
 
 char* getSerialNumber(myNvs_handle *nvs){
-    
-    size_t required_size = STR_LENGHT;
-    esp_err_t err;
-    err= nvs_get_str(nvs->handle, KEY_SERIAL_NUMBER, NULL, &required_size);
-    ESP_ERROR_CHECK(err);
-    if (err != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Serial number not found, using default: %s", nvs->serialNumber);
-    }
     if(nvs->serialNumber == NULL){
-        printf("Error\n");
+        ESP_LOGI(TAG,"No serial number, using number: 0");
+        return "0";
     }
-    else{
-        nvs->serialNumber = malloc(required_size);
-        err= nvs_get_str(nvs->handle, KEY_SERIAL_NUMBER, nvs->serialNumber, &required_size);
-    }
-    //printf("test: \033[0;36m%s\n\033[0m", nvs->serialNumber);
+    // printf("test: \033[0;36m%s\n\033[0m", nvs->serialNumber);
     return nvs->serialNumber;
 }
 
-void setDeviceName(myNvs_handle *nvs, char * name){
-    // esp_err_t err = nvs_open("DeviceInfo", NVS_READWRITE, &nvs->handle); // <-- FIX: Använd nvs.handle
-    // if (err != ESP_OK)
-    // {
-    //     ESP_LOGE(TAG, "Failed to open NVS namespace");
-    //     return;
-    // }
-
-    ESP_ERROR_CHECK_WITHOUT_ABORT(nvs_set_str(nvs->handle, KEY_DEVICE_NAME, name));
-    nvs_commit(nvs->handle);
-    ESP_LOGI(TAG, "Updated Device Name: %s", name);
-}
-void setSerialNumber(myNvs_handle *nvs, char * number){
-    // esp_err_t err = nvs_open("DeviceInfo", NVS_READWRITE, &nvs->handle); // <-- FIX: Använd nvs.handle
-    // if (err != ESP_OK)
-    // {
-    //     ESP_LOGE(TAG, "Failed to open NVS namespace");
-    //     return;
-    // }
-
-    ESP_ERROR_CHECK_WITHOUT_ABORT(nvs_set_str(nvs->handle, KEY_SERIAL_NUMBER, number));
-    nvs_commit(nvs->handle);
-    ESP_LOGI(TAG, "Updated serial number: %s", number);
-}
-
-void nvsDestroy(){
+void nvsErase(){
     nvs_flash_erase();
 }
-void nvsClose(myNvs_handle *nvs){
-    free(nvs);
-    nvs_close(nvs->handle);
+void nvsFree(myNvs_handle *nvs){
+    
+    free(nvs->deviceName);
+    free(nvs->serialNumber);
+    nvs->deviceName = NULL;
+    nvs->serialNumber = NULL;
 }
