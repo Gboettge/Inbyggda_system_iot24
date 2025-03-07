@@ -1,3 +1,4 @@
+#pragma once
 #include "driver/ledc.h" 
 #include "freertos/FreeRTOS.h"
 #define MAX_DUTY 255
