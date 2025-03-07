@@ -32,15 +32,15 @@ typedef struct
 
 typedef color * RGB_handle;
 
-color colors[] = {
-{255, 0, 0}, //red
-{0, 255, 0}, //green
-{0, 0, 255}, //blue
-{255, 255, 0}, //yellow
-{255, 0, 255}, //Magenta
-{0, 255, 255}, //cyan
-{255, 255, 255} //white
-};
+// color colors[] = {
+// {255, 0, 0}, //red
+// {0, 255, 0}, //green
+// {0, 0, 255}, //blue
+// {255, 255, 0}, //yellow
+// {255, 0, 255}, //Magenta
+// {0, 255, 255}, //cyan
+// {255, 255, 255} //white
+// };
 
 typedef enum{
 RED = 0,
