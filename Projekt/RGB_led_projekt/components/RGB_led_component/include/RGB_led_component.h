@@ -8,8 +8,8 @@
 #define Blue_PIN 20
 //#define LEDC_TIMER_8_BIT // 8-bitar (0-255)
 
-#define RED_HPOINT 100
-#define GREEN_HPOINT 155
+#define RED_HPOINT 0
+#define GREEN_HPOINT 0
 #define BLUE_HPOINT 0
 
 #define RED_CHANNEL 0
@@ -32,21 +32,21 @@ typedef struct
 
 typedef RGB * RGB_handle;
 
-typedef struct{
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-}color;
+// typedef struct{
+//     uint8_t red;
+//     uint8_t green;
+//     uint8_t blue;
+// }color;
 
-color colors[] = {
-{255, 0, 0}, //red
-{0, 255, 0}, //green
-{0, 0, 255}, //blue
-{255, 255, 0}, //yellow
-{255, 0, 255}, //Magenta
-{0, 255, 255}, //cyan
-{255, 255, 255} //white
-};
+// color colors[] = {
+// {255, 0, 0}, //red
+// {0, 255, 0}, //green
+// {0, 0, 255}, //blue
+// {255, 255, 0}, //yellow
+// {255, 0, 255}, //Magenta
+// {0, 255, 255}, //cyan
+// {255, 255, 255} //white
+// };
 
 typedef enum{
 RED = 0,
