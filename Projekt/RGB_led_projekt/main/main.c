@@ -10,5 +10,10 @@ setRGB(rgb, 255, 255, 0);
         updateRGB(rgb);
         vTaskDelay(pdMS_TO_TICKS(20));
     }
+    for (int i = 0; i <= 6; i++){
+        setRGB(rgb, colors[i].red, colors[i].green, colors[i].blue);
+        updateRGB(rgb);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 
 }
