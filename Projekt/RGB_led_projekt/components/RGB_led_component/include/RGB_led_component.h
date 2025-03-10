@@ -38,15 +38,7 @@ typedef struct{
     uint8_t blue;
 }color;
 
-color colors[] = {
-{255, 0, 0}, //red
-{0, 255, 0}, //green
-{0, 0, 255}, //blue
-{255, 255, 0}, //yellow
-{255, 0, 255}, //Magenta
-{0, 255, 255}, //cyan
-{255, 255, 255} //white
-};
+extern color colors[];
 
 typedef enum{
 RED = 0,

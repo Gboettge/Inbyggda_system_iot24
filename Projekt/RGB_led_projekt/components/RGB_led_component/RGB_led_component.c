@@ -1,6 +1,21 @@
 #include <stdio.h>
 #include "RGB_led_component.h"
 
+color colors[] = {
+    {255, 0, 0}, //red
+    {0, 255, 0}, //green
+    {0, 0, 255}, //blue
+    {255, 170, 0}, //yellow
+    {255, 0, 255}, //Magenta
+    {0, 255, 255}, //cyan
+    {255, 255, 255}, //white
+    {75 ,0 ,130}, //purple
+    {230, 59, 0},  //orange bäst hittils
+    {255, 215, 0},  //orange
+    {255, 69, 0}  //orange
+    
+    };
+
 RGB_handle rgb_init(){
     RGB_handle newRGB = pvPortMalloc(sizeof(RGB));
     
@@ -76,33 +91,39 @@ void setRGB(RGB_handle rgb, int red, int green, int blue){
     {
         blue = MAX_DUTY;
     }
-    int red_hpoint = 50;
-    int green_hpoint = 50;
-    int blue_hpoint = 50;
-    int tot = red + green + blue;
+    // int red_hpoint = 50;
+    // int green_hpoint = 50;
+    // int blue_hpoint = 50;
+    // int tot = red + green + blue;
 
-    if(tot > 255){
-        red_hpoint = (red *255)/tot; // lös float
-        red_hpoint = ((red_hpoint * 2) +1 )/2;
-        printf("%d\n", red_hpoint);
-        green_hpoint = (green *255)/tot;//
-        green_hpoint = ((green_hpoint * 2) +1 )/2;
-        printf("%d\n", green_hpoint);
-        blue_hpoint = (blue *255)/tot; //
-        blue_hpoint = ((blue_hpoint * 2) +1 )/2;
-        printf("%d\n", blue_hpoint);
-    }
+    // if(tot > 255){
+    //     red_hpoint = (red *255)/tot; // lös float
+    //     red_hpoint = ((red_hpoint * 2) +1 )/2;
+    //     printf("%d\n", red_hpoint);
+    //     green_hpoint = (green *255)/tot;//
+    //     green_hpoint = ((green_hpoint * 2) +1 )/2;
+    //     printf("%d\n", green_hpoint);
+    //     blue_hpoint = (blue *255)/tot; //
+    //     blue_hpoint = ((blue_hpoint * 2) +1 )/2;
+    //     printf("%d\n", blue_hpoint);
+    // }
     
+    // rgb->red_duty = (uint8_t)red_hpoint;
+    // printf("set red: %u previous %u\n", red, rgb->previous_red_duty);
+    // rgb->green_duty = (uint8_t)green_hpoint;
+    // printf("set green: %u previous %u\n", green, rgb->previous_green_duty);
+    // rgb->blue_duty = (uint8_t)blue_hpoint;
+    // printf("set blue: %u previous %u\n", blue, rgb->previous_blue_duty);
 
-    
+    rgb->red_duty = red;
+    rgb->green_duty = green;
+    rgb->blue_duty = blue;
 
+    //weak
+    rgb->red_duty = red/5;
+    rgb->green_duty = green/5;
+    rgb->blue_duty = blue/5;
 
-    rgb->red_duty = (uint8_t)red_hpoint;
-    printf("set red: %u previous %u\n", red, rgb->previous_red_duty);
-    rgb->green_duty = (uint8_t)green_hpoint;
-    printf("set green: %u previous %u\n", green, rgb->previous_green_duty);
-    rgb->blue_duty = (uint8_t)blue_hpoint;
-    printf("set blue: %u previous %u\n", blue, rgb->previous_blue_duty);
 
 }
 
@@ -112,8 +133,8 @@ void updateRGB(RGB_handle rgb){
     {
         printf("update red\n");
         rgb->previous_red_duty = rgb->red_duty;
-        // ledc_set_duty(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty);
-        ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty*3, 0);
+        ledc_set_duty(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty);
+        // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty*3, 0);
         ledc_update_duty(LEDC_LOW_SPEED_MODE, RED_CHANNEL);
     }
     
@@ -121,8 +142,8 @@ void updateRGB(RGB_handle rgb){
     {
         printf("update green\n");
         rgb->previous_green_duty = rgb->green_duty;
-        // ledc_set_duty(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty);
-        ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty*3, rgb->red_duty);
+        ledc_set_duty(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty);
+        // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty*3, rgb->red_duty);
         ledc_update_duty(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL);
         
     }
@@ -131,8 +152,8 @@ void updateRGB(RGB_handle rgb){
     {
         printf("update blue\n");
         rgb->previous_blue_duty = rgb->blue_duty;
-        //ledc_set_duty(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty);//
-        ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty *3, rgb->red_duty + rgb->green_duty);
+        ledc_set_duty(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty);//
+        // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty *3, rgb->red_duty + rgb->green_duty);
         ledc_update_duty(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL);
         // ledc_set_duty_and_update
     }
