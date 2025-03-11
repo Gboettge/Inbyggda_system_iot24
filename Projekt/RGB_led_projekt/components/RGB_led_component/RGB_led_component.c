@@ -5,16 +5,37 @@ color colors[] = {
     {255, 0, 0}, //red
     {0, 255, 0}, //green
     {0, 0, 255}, //blue
-    {255, 170, 0}, //yellow
+    {255, 150, 0}, //yellow
     {255, 0, 255}, //Magenta
     {0, 255, 255}, //cyan
     {255, 255, 255}, //white
     {75 ,0 ,130}, //purple
-    {230, 59, 0},  //orange bäst hittils
-    {255, 215, 0},  //orange
-    {255, 69, 0}  //orange
+    {230, 29, 0},  //orange 9
+    {0,0,0}, //OFF
+    // {230, 59, 0},  //orange bäst hittils
+    // {230, 89, 0}  //orange
+    {255, 255, 0}, //yellow
+    {255, 200, 0}, //yellow
+    {255, 170, 0}, //yellow
+    {255, 150, 0}, //yellow
+    {255, 120, 0}, //yellow
+    {255, 100, 0}, //yellow
+    {255, 80, 0}, //yellow
+    {255, 50, 0}, //yellow
     
-    };
+};
+
+const char *color_names[] = {
+    "RED",
+    "GREEN",
+    "BLUE",
+    "YELLOW",
+    "MAGENTA",
+    "CYAN",
+    "WHITE",
+    "PURPLE",
+    "ORANGE"
+};
 
 RGB_handle rgb_init(){
     RGB_handle newRGB = pvPortMalloc(sizeof(RGB));
@@ -120,9 +141,9 @@ void setRGB(RGB_handle rgb, int red, int green, int blue){
     rgb->blue_duty = blue;
 
     //weak
-    rgb->red_duty = red/5;
-    rgb->green_duty = green/5;
-    rgb->blue_duty = blue/5;
+    // rgb->red_duty = red/5;
+    // rgb->green_duty = green/5;
+    // rgb->blue_duty = blue/5;
 
 
 }
@@ -131,7 +152,7 @@ void updateRGB(RGB_handle rgb){
 
     if (rgb->previous_red_duty != rgb->red_duty)
     {
-        printf("update red\n");
+        // printf("update red\n");
         rgb->previous_red_duty = rgb->red_duty;
         ledc_set_duty(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty);
         // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, RED_CHANNEL, rgb->red_duty*3, 0);
@@ -140,7 +161,7 @@ void updateRGB(RGB_handle rgb){
     
     if (rgb->previous_green_duty != rgb->green_duty)
     {
-        printf("update green\n");
+        // printf("update green\n");
         rgb->previous_green_duty = rgb->green_duty;
         ledc_set_duty(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty);
         // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, GREEN_CHANNEL, rgb->green_duty*3, rgb->red_duty);
@@ -150,7 +171,7 @@ void updateRGB(RGB_handle rgb){
     
     if (rgb->previous_blue_duty != rgb->blue_duty)
     {
-        printf("update blue\n");
+        // printf("update blue\n");
         rgb->previous_blue_duty = rgb->blue_duty;
         ledc_set_duty(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty);//
         // ledc_set_duty_with_hpoint(LEDC_LOW_SPEED_MODE, BLUE_CHANNEL, rgb->blue_duty *3, rgb->red_duty + rgb->green_duty);

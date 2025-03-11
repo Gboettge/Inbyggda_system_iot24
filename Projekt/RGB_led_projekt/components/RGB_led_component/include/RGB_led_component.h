@@ -1,6 +1,9 @@
 #pragma once
 #include "driver/ledc.h" 
 #include "freertos/FreeRTOS.h"
+#include "esp_log.h"
+
+#define TAG "RGB"
 #define MAX_DUTY 255
 
 #define RED_PIN 23
@@ -40,6 +43,8 @@ typedef struct{
 
 extern color colors[];
 
+extern const char *color_names[];
+
 typedef enum{
 RED = 0,
 GREEN,
@@ -47,7 +52,10 @@ BLUE,
 Yellow,
 MAGENTA,
 CYAN,
-WHITE
+WHITE,
+PURPLE,
+ORANGE,
+OFF
 }color_index;
 
 RGB_handle rgb_init();
