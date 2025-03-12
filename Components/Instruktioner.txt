@@ -6,5 +6,6 @@ set(EXTRA_COMPONENT_DIRS /repos/Inbyggda_system_iot24/Components)
 #include "Potentiometer.h"
 #include "Binary_led.h"
 #include "Analog_Led.h"
+#include "DISPLAY1.h"
 
 partition table finns i sdk config

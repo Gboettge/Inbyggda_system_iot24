@@ -9,7 +9,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"cstdint": "cpp"
+			"cstdint": "cpp",
+			"display1.h": "c",
+			"cstdlib": "c"
 		}
 	}
 }
