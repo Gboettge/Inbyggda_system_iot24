@@ -107,31 +107,31 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
         // lv_screen_clean(leftTop);
         leftTop = lv_label_create(scr);
         lv_label_set_long_mode(leftTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftTop, display->disp->driver->hor_res/2);
+        lv_obj_set_width(leftTop, display->disp->driver->hor_res);
         lv_obj_align(leftTop, LV_ALIGN_TOP_LEFT, 0, 0);
     }
     if(leftCenter == NULL){
         leftCenter = lv_label_create(scr);
         lv_label_set_long_mode(leftCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftCenter, display->disp->driver->hor_res/2); 
+        lv_obj_set_width(leftCenter, display->disp->driver->hor_res); 
         lv_obj_align(leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     }
     if(leftBottom == NULL){
         leftBottom = lv_label_create(scr);
         lv_label_set_long_mode(leftBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftBottom, display->disp->driver->hor_res/2);
+        lv_obj_set_width(leftBottom, display->disp->driver->hor_res);
         lv_obj_align(leftBottom, LV_ALIGN_BOTTOM_LEFT, 0, 0);
     }
     if(rightTop == NULL){
         rightTop = lv_label_create(scr);
         lv_label_set_long_mode(rightTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(rightTop, display->disp->driver->hor_res/3);   
+        lv_obj_set_width(rightTop, display->disp->driver->hor_res/5);   
         lv_obj_align(rightTop, LV_ALIGN_TOP_RIGHT, 0, 0);
     }
     if(rightBottom == NULL){
         rightBottom = lv_label_create(scr);
         lv_label_set_long_mode(rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(rightBottom, display->disp->driver->hor_res/4);
+        lv_obj_set_width(rightBottom, display->disp->driver->hor_res/5);
         lv_obj_align(rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
        
     }

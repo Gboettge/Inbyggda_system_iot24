@@ -15,7 +15,22 @@
 			"cstdint": "cpp",
 			"display1.h": "c",
 			"cstdlib": "c",
-			"adc_monitor.h": "c"
+			"adc_monitor.h": "c",
+			"algorithm": "c",
+			"chrono": "c",
+			"functional": "c",
+			"optional": "c",
+			"system_error": "c",
+			"type_traits": "c",
+			"xlocmon": "c",
+			"xtr1common": "c",
+			"xutility": "c",
+			"charconv": "c",
+			"format": "c",
+			"ratio": "c",
+			"array": "c",
+			"tuple": "c",
+			"utility": "c"
 		}
 	}
 }
