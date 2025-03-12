@@ -63,3 +63,5 @@ RGB_handle rgb_init();
 void setRGB(RGB_handle rgb, int red, int green, int blue);
 
 void updateRGB(RGB_handle rgb);
+
+void fadeRGB(RGB_handle rgb);

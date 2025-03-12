@@ -34,7 +34,8 @@ const char *color_names[] = {
     "CYAN",
     "WHITE",
     "PURPLE",
-    "ORANGE"
+    "ORANGE",
+    "NONE"
 };
 
 RGB_handle rgb_init(){
@@ -183,6 +184,35 @@ void updateRGB(RGB_handle rgb){
         printf("LED handle is NULL!\n");
         return;
     }
+
     
+    
+}
+
+void fadeRGB(RGB_handle rgb){
+    uint8_t redd = rgb->red_duty;
+    uint8_t greend = rgb->green_duty;
+    uint8_t blued = rgb->blue_duty;
+    if (redd >= 11){
+        redd = (redd/10) * 9;
+        rgb->red_duty = redd;
+    }
+    else{
+        rgb->red_duty = 0;
+    }
+    if (greend >= 11){
+        greend = (greend/10) * 9;
+        rgb->green_duty = greend;
+    }
+    else{
+        rgb->green_duty = 0;
+    }
+    if (blued >= 11){
+        blued = (blued/10) *9;
+        rgb->blue_duty = blued;
+    }
+    else{
+        rgb->blue_duty = 0;
+    }
 }
 
