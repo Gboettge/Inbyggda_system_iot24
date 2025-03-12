@@ -3,8 +3,9 @@
 #include "button.h"
 #include "DISPLAY1.h"
 #include "driver/adc.h"
+#include "Potentiometer.h"
 
-
+pot_handle pot;
 RGB_handle rgb;
 button_handle redBtn;
 display_s *display;
@@ -17,13 +18,11 @@ void app_main(void)
 {
     redBtn = button_init(2, GPIO_PULLUP); 
     display = display_init();
+    potentiometer_init(0,0);
     // greenBtn = button_init(3, GPIO_PULLUP); 
     // blueBtn = button_init(4, GPIO_PULLUP); 
     rgb = rgb_init();
     setRGB(rgb, 55, 55, 55);
-
-    adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_DB_0);
 
     int i = -1;
     TickType_t previousSwitch = 0;
@@ -57,21 +56,22 @@ void app_main(void)
         {
             if (currentTick - previousSwitch >= pdMS_TO_TICKS(500))
             {
-                int adc_reading = adc1_get_raw(ADC1_CHANNEL_0);
+                int adc_reading = pot_get_value(pot);
+                ESP_LOGI(TAG, "ADC Reading: %d", adc_reading);
                 int myrandom = getRandom(adc_reading, 10);
                 i++;
                 if (i == 10)
                 {
                     i = 0;
                 }
-                char randomstr[4];
-                sprintf(randomstr, "%d", myrandom);
-                char myInt[4];
-                sprintf(myInt, "%d", i);
+                char randomstr[12];
+                char myInt[12];
+                snprintf(randomstr, sizeof(randomstr),"%d", myrandom);
+                snprintf(myInt, sizeof(myInt),"%d", i);
                 previousSwitch = currentTick;
                 setRGB(rgb, colors[i].red, colors[i].green, colors[i].blue);
-                display_ui(display, color_names[i], NULL, NULL, randomstr, myInt);
-                ESP_LOGI(TAG, "%s", color_names[i]);
+                display_ui(display, color_names[i], "hej", "yaa", randomstr, myInt);
+                // ESP_LOGI(TAG, "%s", color_names[i]);
             }
         }
         vTaskDelay(pdMS_TO_TICKS(40));

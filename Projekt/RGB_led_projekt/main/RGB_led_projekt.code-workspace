@@ -5,13 +5,17 @@
 		},
 		{
 			"path": "../../../Components/Button"
+		},
+		{
+			"path": "../../../Components/DISPLAY1"
 		}
 	],
 	"settings": {
 		"files.associations": {
 			"cstdint": "cpp",
 			"display1.h": "c",
-			"cstdlib": "c"
+			"cstdlib": "c",
+			"adc_monitor.h": "c"
 		}
 	}
 }
