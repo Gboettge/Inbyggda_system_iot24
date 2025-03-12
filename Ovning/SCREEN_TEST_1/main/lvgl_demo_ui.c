@@ -21,7 +21,7 @@ void example_lvgl_demo_ui(lv_disp_t *disp)
     //lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_label_set_text(label, "Hej baby");
 
-    //lv_label_set_long_mode(label1, LV_LABEL_LONG_SCROLL_CIRCULAR); /* Circular scroll */
+    lv_label_set_long_mode(label1, LV_LABEL_LONG_SCROLL_CIRCULAR); /* Circular scroll */
     lv_label_set_text(label1, "Jag kommer inte hem till middag...");
    
     //lv_label_set_long_mode(label2, LV_LABEL_LONG_SCROLL); /* Circular scroll */
