@@ -11,6 +11,7 @@ button_handle greenBtn;
 button_handle blueBtn;
 display_s *display;
 
+//SNI koder
 // lös så value 3 inte kan bli samma som value 1
 int* get_x_randoms(int returnAmount, int modulu) {
     int* randoms = malloc(returnAmount * sizeof(int));
@@ -99,7 +100,7 @@ void app_main(void)
                     ESP_LOGI(TAG, "Wrong, answear was: %d", correctPlacement);
                 }
             }
-            // i++;
+            i++;
             
             int myrandom = getRandom(currentTick, 10);
             int *newRandoms = get_x_randoms(3, 10);
@@ -115,10 +116,10 @@ void app_main(void)
                 int *newRandoms = get_x_randoms(3, 10);
             }
             
-            if (i == 10)
-            {
-                i = 0;
-            }
+            // if (i == 10)
+            // {
+            //     i = 0;
+            // }
             vTaskDelay(pdMS_TO_TICKS(1));
             char scoreStr[12];
             char myInt[12];

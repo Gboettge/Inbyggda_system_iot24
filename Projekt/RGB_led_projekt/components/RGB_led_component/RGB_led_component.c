@@ -12,8 +12,6 @@ color colors[] = {
     {75 ,0 ,130}, //purple
     {230, 29, 0},  //orange 9
     {0,0,0}, //OFF
-    // {230, 59, 0},  //orange bäst hittils
-    // {230, 89, 0}  //orange
     {255, 255, 0}, //yellow
     {255, 200, 0}, //yellow
     {255, 170, 0}, //yellow
@@ -22,6 +20,10 @@ color colors[] = {
     {255, 100, 0}, //yellow
     {255, 80, 0}, //yellow
     {255, 50, 0}, //yellow
+    {230, 255, 0}, //yellow
+    {200, 255, 0}, //yellow
+    // {230, 59, 0},  //orange bäst hittils
+    // {230, 89, 0}  //orange
     
 };
 
