@@ -4,6 +4,7 @@
 #include "DISPLAY1.h"
 
 
+int choise = 0;
 RGB_handle rgb;
 button_handle redBtn;
 display_s *display;
@@ -41,6 +42,8 @@ int getRandom(int value, int modulu)
     
     return newval;
 }
+void setBtn1();
+
 // läs värde från en pin, använd modulu(antalet alternativ) för att slumpa (0-4095)
 void app_main(void)
 {
@@ -54,10 +57,11 @@ void app_main(void)
     int score = 0;
     int i = -1;
     TickType_t previousSwitch = 0;
+    button_setOnPressed(redBtn, setBtn1);
     while (1)
     {
         TickType_t currentTick = xTaskGetTickCount();
-        // fadeRGB(rgb); //disco
+      
         updateRGB(rgb);
         button_update(redBtn);
 
@@ -66,6 +70,9 @@ void app_main(void)
         {
             if (currentTick - previousSwitch >= pdMS_TO_TICKS(500))
             {   
+                if(choise != 0){
+                    ESP_LOGI(TAG, "Correct %d", choise);
+                }
                 i++;
                 score++;
                 int myrandom = getRandom(currentTick, 10);
@@ -91,7 +98,7 @@ void app_main(void)
                 int two = newRandoms[2];
                 ESP_LOGI(TAG,"Placement: %d\n", newPlacement);
                 ESP_LOGI(TAG,"randoms = %d, %d, %d\n", zero, one, two);
-                setRGB(rgb, colors[one].red, colors[one].green, colors[one].blue);
+                setRGB(rgb, colors[zero].red, colors[zero].green, colors[zero].blue);
                 if(newPlacement == 0){
                     display_ui(display, color_names[zero], color_names[one], color_names[two], scoreStr, myInt);
                    
@@ -111,23 +118,7 @@ void app_main(void)
         // vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
-// if (i == RED && button_isPressed(redBtn) == true){
-    //     ESP_LOGI(TAG, "Correct! pause: 5s");
-    //     setRGB(rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
-//     updateRGB(rgb);
-//     vTaskDelay(pdMS_TO_TICKS(5000));
-//     button_update(redBtn);
-//     previousSwitch = currentTick;
 
-// }
-// if (currentTick - previousSwitch >= pdMS_TO_TICKS(2000))
-// {
-    //     i++;
-    //     if (i == 9){
-        //         i = 0;
-        //     }
-        //     previousSwitch = currentTick;
-        //     setRGB(rgb, colors[i].red, colors[i].green, colors[i].blue);
-        
-        //     ESP_LOGI(TAG, "%s", color_names[i]);
-        // }
+void setBtn1(int pin){
+    choise = pin;
+}
