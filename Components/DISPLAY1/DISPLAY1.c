@@ -190,4 +190,5 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
     // lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
     // lv_obj_align(label1, LV_ALIGN_CENTER, 0, 0);
     // lv_obj_align(label2, LV_ALIGN_BOTTOM_MID, 0, 0);
+    
 }
