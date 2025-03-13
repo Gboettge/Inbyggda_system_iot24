@@ -14,6 +14,9 @@
 #include <string.h>
 
 
+#ifdef TAG
+#undef TAG
+#endif
 #define TAG "Display"
 
 #define I2C_BUS_PORT  0

@@ -2,21 +2,43 @@
 #include "RGB_led_component.h"
 #include "button.h"
 #include "DISPLAY1.h"
-#include "driver/adc.h"
+
 
 RGB_handle rgb;
 button_handle redBtn;
 display_s *display;
 
 // lös så value 3 inte kan bli samma som value 1
+int* get_x_randoms(int returnAmount, int modulu) {
+    int* randoms = malloc(returnAmount * sizeof(int));
+    if (randoms == NULL) {
+        return NULL; // Hantera minnesallokeringsfel
+    }
 
-int getRandom(int value, int modulu, int i)
+    for (int i = 0; i < returnAmount; i++) {
+        int random;
+        int isUnique;
+        do {
+            isUnique = 1;
+            random = rand() % modulu;
+            for (int j = 0; j < i; j++) {
+                if (random == randoms[j]) {
+                    isUnique = 0;
+                    break;
+                }
+            }
+        } while (!isUnique);
+        randoms[i] = random;
+    }
+
+    return randoms;
+}
+
+
+int getRandom(int value, int modulu)
 {
     int newval = value % modulu;
-    if (newval == i)
-    {
-        newval = (value + 1) % modulu;
-    }
+    
     return newval;
 }
 // läs värde från en pin, använd modulu(antalet alternativ) för att slumpa (0-4095)
@@ -29,7 +51,7 @@ void app_main(void)
     // blueBtn = button_init(4, GPIO_PULLUP);
     rgb = rgb_init();
     setRGB(rgb, 55, 55, 55);
-
+    int score = 0;
     int i = -1;
     TickType_t previousSwitch = 0;
     while (1)
@@ -43,22 +65,46 @@ void app_main(void)
         if (button_isPressed(redBtn))
         {
             if (currentTick - previousSwitch >= pdMS_TO_TICKS(500))
-            {
-                int adc_reading = (int)previousSwitch;
-                ESP_LOGI(TAG, "ADC Reading: %d", adc_reading);
+            {   
                 i++;
-                int myrandom = getRandom(adc_reading, 10, i);
+                score++;
+                int myrandom = getRandom(currentTick, 10);
+                int* newRandoms = get_x_randoms(3, 10);
+                if (newRandoms != NULL) {
+                    ESP_LOGI(TAG, "Random: %d", newRandoms[0]);
+                    ESP_LOGI(TAG, "Random: %d", newRandoms[1]);
+                    ESP_LOGI(TAG, "Random: %d", newRandoms[2]);
+                }
                 if (i == 10)
                 {
                     i = 0;
                 }
-                char randomstr[12];
+                char scoreStr[12];
                 char myInt[12];
-                snprintf(randomstr, sizeof(randomstr), "%d", myrandom);
+                snprintf(scoreStr, sizeof(scoreStr), "%d", score);
                 snprintf(myInt, sizeof(myInt), "%d", i);
                 previousSwitch = currentTick;
-                setRGB(rgb, colors[i].red, colors[i].green, colors[i].blue);
-                display_ui(display, color_names[i], color_names[myrandom], color_names[(myrandom + 5) % 10], randomstr, myInt);
+                int placement = newRandoms[0] + newRandoms[1] + newRandoms[2];
+                int newPlacement = getRandom(placement, 3);
+                int zero = newRandoms[0];
+                int one = newRandoms[1];
+                int two = newRandoms[2];
+                ESP_LOGI(TAG,"Placement: %d\n", newPlacement);
+                ESP_LOGI(TAG,"randoms = %d, %d, %d\n", zero, one, two);
+                setRGB(rgb, colors[one].red, colors[one].green, colors[one].blue);
+                if(newPlacement == 0){
+                    display_ui(display, color_names[zero], color_names[one], color_names[two], scoreStr, myInt);
+                   
+                }
+                else if (newPlacement == 1){
+                    display_ui(display, color_names[two], color_names[zero], color_names[one], scoreStr, myInt);
+                }
+                else if (newPlacement == 2){
+                    display_ui(display, color_names[one], color_names[two], color_names[zero], scoreStr, myInt);
+                }
+                free(newRandoms); // Frigör minnet när det inte längre behövs
+                // display_ui(display, color_names[i], color_names[myrandom], color_names[(myrandom + 5) % 10], randomstr, myInt);
+                // display_ui(display, color_names[i], color_names[myrandom], color_names[(myrandom + 5) % 10], randomstr, myInt);
                 // ESP_LOGI(TAG, "%s", color_names[i]);
             }
         }
