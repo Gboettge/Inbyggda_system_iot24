@@ -3,6 +3,8 @@
 #include "button.h"
 #include "DISPLAY1.h"
 #include "Binary_Led.h"
+#define COLOR_SIZE 9
+#define PAUSE 1000
 
 
 int choise = 0;
@@ -24,13 +26,23 @@ void chooseTwo();
 void chooseThree();
 // läs värde från en pin, använd modulu(antalet alternativ) för att slumpa (0-4095)
 void syncLives(int lives);
+void startGameOne();
 void app_main(void)
 {
+    printf("Hello world!\n");
+    startGameOne();
+
+    
+}
+void startGameOne()
+{
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    ESP_LOGI(TAG, "Starting... %d", __LINE__);
     gpio_reset_pin(16);
     gpio_reset_pin(17);
     gpio_reset_pin(5);
-    bLed1 = b_led_init(16, BL_LIGHT_ON, false);
-    bLed2 = b_led_init(17, BL_LIGHT_ON, false);
+    bLed1 = b_led_init(18, BL_LIGHT_ON, false);
+    bLed2 = b_led_init(19, BL_LIGHT_ON, false);
     bLed3 = b_led_init(5, BL_LIGHT_ON, false);
     redBtn = button_init(2, GPIO_PULLUP);
     greenBtn = button_init(3, GPIO_PULLUP);
@@ -40,19 +52,25 @@ void app_main(void)
     // blueBtn = button_init(4, GPIO_PULLUP);
     rgb = rgb_init();
     setRGB(rgb, 55, 55, 55);
+    b_led_setled(bLed1, BL_LIGHT_ON);
+    b_led_setled(bLed2, BL_LIGHT_ON);
+    b_led_setled(bLed3, BL_LIGHT_ON);
+    button_setOnPressed(redBtn, chooseOne);
+    button_setOnPressed(greenBtn, chooseTwo);
+    button_setOnPressed(blueBtn, chooseThree);
     int correctPlacement = 0;
     int score = 0;
     int i = -1;
     TickType_t previousSwitch = 0;
-    button_setOnPressed(redBtn, chooseOne);
-    button_setOnPressed(greenBtn, chooseTwo);
-    button_setOnPressed(blueBtn, chooseThree);
     int lives = 3;
-    while (1)
+    syncLives(lives);
+    while (lives > 0)
     {
+        b_led_update(bLed1);
+        b_led_update(bLed2);
+        b_led_update(bLed3);
         TickType_t currentTick = xTaskGetTickCount();
         
-        syncLives(lives);
         updateRGB(rgb);
         button_update(redBtn);
         button_update(greenBtn);
@@ -64,31 +82,38 @@ void app_main(void)
         //     if (currentTick - previousSwitch >= pdMS_TO_TICKS(500))
         //     {
         if (choise != 0)
-        {
+        {   
+            char* answear = NULL;
             if (correctPlacement != 0)
             {
                 if (correctPlacement == choise)
                 {
                     score++;
                     ESP_LOGI(TAG, "Correct %d", choise);
+                    answear = "Correct";
                 }
                 else
                 {
                     ESP_LOGI(TAG, "Wrong, answear was: %d", correctPlacement);
+                    answear = "Wrong";
                     lives--;
                     syncLives(lives);
                     if (lives == 0)
                     {
                         ESP_LOGI(TAG, "Game Over");
-                        break;
+                        // break;
                     }
                 }
             }
+            display_update(display, answear);
+            setRGB(rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
+            updateRGB(rgb);
+            vTaskDelay(pdMS_TO_TICKS(PAUSE));
             i++;
             
             
-            int myrandom = getRandom(currentTick, 10);
-            int *newRandoms = get_x_randoms(3, 10, currentTick);
+            int myrandom = getRandom(currentTick, COLOR_SIZE);
+            int *newRandoms = get_x_randoms(3, COLOR_SIZE, currentTick);
             if (newRandoms != NULL)
             {
                 ESP_LOGI(TAG, "Random: %d", newRandoms[0]);
@@ -98,7 +123,7 @@ void app_main(void)
             else if(newRandoms == NULL)
             {
                 ESP_LOGE(TAG, "Error");
-                int *newRandoms = get_x_randoms(3, 10, currentTick);
+                int *newRandoms = get_x_randoms(3, COLOR_SIZE, currentTick);
             }
             
             // if (i == 10)
@@ -147,15 +172,8 @@ void app_main(void)
             choise = 0;
             
         }
-        // display_ui(display, color_names[i], color_names[myrandom], color_names[(myrandom + 5) % 10], randomstr, myInt);
-        // display_ui(display, color_names[i], color_names[myrandom], color_names[(myrandom + 5) % 10], randomstr, myInt);
-        // ESP_LOGI(TAG, "%s", color_names[i]);
-
-        
     }
-    //     }
-    //     // vTaskDelay(pdMS_TO_TICKS(1000));
-    // }
+
 }
 
 void chooseOne(){
@@ -174,28 +192,28 @@ void syncLives(int lives){
         b_led_setled(bLed2, BL_LIGHT_ON);
         b_led_setled(bLed3, BL_LIGHT_ON);
     }
-    else
-    if (lives ==2)
+    else if (lives ==2)
     {
+        ESP_LOGI(TAG, "Lives: %d", lives);
+        b_led_update(bLed1);
         b_led_setled(bLed1, BL_LIGHT_OFF);
-        b_led_setled(bLed2, BL_LIGHT_ON);
-        b_led_setled(bLed3, BL_LIGHT_ON);
+        // b_led_setled(bLed2, BL_LIGHT_ON);
+        // b_led_setled(bLed3, BL_LIGHT_ON);
     }
     else if (lives == 1)
     {
-        b_led_setled(bLed1, BL_LIGHT_OFF);
+        // b_led_setled(bLed1, BL_LIGHT_OFF);
+        b_led_update(bLed2);
         b_led_setled(bLed2, BL_LIGHT_OFF);
-        b_led_setled(bLed3, BL_LIGHT_ON);
+        // b_led_setled(bLed3, BL_LIGHT_ON);
     }
     else if (lives == 0)
     {
-        b_led_setled(bLed1, BL_LIGHT_OFF);
-        b_led_setled(bLed2, BL_LIGHT_OFF);
+        // b_led_setled(bLed1, BL_LIGHT_OFF);
+        // b_led_setled(bLed2, BL_LIGHT_OFF);
         b_led_setled(bLed3, BL_LIGHT_OFF); 
+        b_led_update(bLed3);
     }
-    b_led_update(bLed1);
-    b_led_update(bLed2);
-    b_led_update(bLed3);
 }
 
 int getRandom(int value, int modulu)

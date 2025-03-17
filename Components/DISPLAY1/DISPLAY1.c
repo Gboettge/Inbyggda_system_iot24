@@ -107,19 +107,19 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
         // lv_screen_clean(leftTop);
         leftTop = lv_label_create(scr);
         lv_label_set_long_mode(leftTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftTop, display->disp->driver->hor_res);
+        lv_obj_set_width(leftTop, display->disp->driver->hor_res*4/5);
         lv_obj_align(leftTop, LV_ALIGN_TOP_LEFT, 0, 0);
     }
     if(leftCenter == NULL){
         leftCenter = lv_label_create(scr);
         lv_label_set_long_mode(leftCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftCenter, display->disp->driver->hor_res); 
+        lv_obj_set_width(leftCenter, display->disp->driver->hor_res*4/5); 
         lv_obj_align(leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     }
     if(leftBottom == NULL){
         leftBottom = lv_label_create(scr);
         lv_label_set_long_mode(leftBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-        lv_obj_set_width(leftBottom, display->disp->driver->hor_res);
+        lv_obj_set_width(leftBottom, display->disp->driver->hor_res*4/5);
         lv_obj_align(leftBottom, LV_ALIGN_BOTTOM_LEFT, 0, 0);
     }
     if(rightTop == NULL){
@@ -191,4 +191,17 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
     // lv_obj_align(label1, LV_ALIGN_CENTER, 0, 0);
     // lv_obj_align(label2, LV_ALIGN_BOTTOM_MID, 0, 0);
     
+}
+
+void display_update(display_s *display, char* answear)
+{
+    lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
+    lv_obj_clean(scr);
+    lv_obj_t *label = lv_label_create(scr);
+    lv_obj_set_width(label, display->disp->driver->hor_res);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_width(label, 4); 
+    lv_obj_set_height(label, 4);
+    lv_label_set_text(label, answear);
+    // lv_task_handler();
 }

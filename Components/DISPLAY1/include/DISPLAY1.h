@@ -44,4 +44,7 @@ typedef  display_s * display_handle;
 display_s *display_init();
 
 // void display_ui(display_s *disp);
-void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* score, char* time); //leftTop, leftMid, leftButtom, rightTop, rightBottom
+void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* score, char* time); 
+//leftTop, leftMid, leftButtom, rightTop, rightBottom
+
+void display_update(display_s *display, char* answear);

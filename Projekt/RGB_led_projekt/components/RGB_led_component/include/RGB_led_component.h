@@ -54,7 +54,7 @@ MAGENTA,
 CYAN,
 WHITE,
 PURPLE,
-ORANGE,
+ORANGE, //9
 OFF
 }color_index;
 
