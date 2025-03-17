@@ -17,49 +17,12 @@ display_s *display;
 
 //SNI koder
 // lös så value 3 inte kan bli samma som value 1
-int* get_x_randoms(int returnAmount, int modulu, int tickcount) {
-    int* randoms = malloc(returnAmount * sizeof(int));
-    vTaskDelay(pdMS_TO_TICKS(20));
-    if (randoms == NULL) {
-        return NULL; // Hantera minnesallokeringsfel
-    }
-    
-    for (int i = 0; i < returnAmount; i++) {
-        int random;
-        int isUnique;
-        do {
-            isUnique = 1;
-            random = tickcount % modulu;
-            for (int j = 0; j < i; j++) {
-                if (random == randoms[j]) {
-                    tickcount = rand();
-                    isUnique = 0;
-                    break;
-                }
-            }
-        } while (!isUnique);
-        randoms[i] = random;
-        ESP_LOGI(TAG, "random adress; %p", &randoms[i]);
-    }
-    
-    // int * tempRandoms = randoms;
-    // free(randoms);
-    // return tempRandoms;
-    return randoms;
-}
-
-
-int getRandom(int value, int modulu)
-{
-    int newval = value % modulu;
-    
-    return newval;
-}
+int* get_x_randoms(int returnAmount, int modulu, int tickcount); 
+int getRandom(int value, int modulu);
 void chooseOne();
 void chooseTwo();
 void chooseThree();
 // läs värde från en pin, använd modulu(antalet alternativ) för att slumpa (0-4095)
-
 void syncLives(int lives);
 void app_main(void)
 {
@@ -234,3 +197,41 @@ void syncLives(int lives){
     b_led_update(bLed2);
     b_led_update(bLed3);
 }
+
+int getRandom(int value, int modulu)
+{
+    int newval = value % modulu;
+    
+    return newval;
+}
+    int* get_x_randoms(int returnAmount, int modulu, int tickcount) 
+    {
+        int* randoms = malloc(returnAmount * sizeof(int));
+        vTaskDelay(pdMS_TO_TICKS(20));
+        if (randoms == NULL) {
+            return NULL; // Hantera minnesallokeringsfel
+        }
+        
+        for (int i = 0; i < returnAmount; i++) {
+            int random;
+            int isUnique;
+            do {
+                isUnique = 1;
+                random = tickcount % modulu;
+                for (int j = 0; j < i; j++) {
+                    if (random == randoms[j]) {
+                        tickcount = rand();
+                        isUnique = 0;
+                        break;
+                    }
+                }
+            } while (!isUnique);
+            randoms[i] = random;
+            ESP_LOGI(TAG, "random adress; %p", &randoms[i]);
+        }
+        
+        // int * tempRandoms = randoms;
+        // free(randoms);
+        // return tempRandoms;
+        return randoms;
+    }
