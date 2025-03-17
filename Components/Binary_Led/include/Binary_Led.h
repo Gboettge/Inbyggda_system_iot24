@@ -2,15 +2,15 @@
 #include "freertos/FreeRTOS.h"
 
 typedef enum{
-    LIGHT_OFF,
-    LIGHT_ON
+    BL_LIGHT_OFF,
+    BL_LIGHT_ON
 }b_led_light_e;
 
 typedef enum{
-    OFF,
-    ON,
-    BLINK_ON,
-    BLINK_OFF
+    BL_OFF,
+    BL_ON,
+    BL_BLINK_ON,
+    BL_BLINK_OFF
 }b_led_state_e;
 
 typedef struct{

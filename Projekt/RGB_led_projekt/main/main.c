@@ -2,9 +2,13 @@
 #include "RGB_led_component.h"
 #include "button.h"
 #include "DISPLAY1.h"
+#include "Binary_Led.h"
 
 
 int choise = 0;
+b_led_handle bLed1;
+b_led_handle bLed2;
+b_led_handle bLed3;
 RGB_handle rgb;
 button_handle redBtn;
 button_handle greenBtn;
@@ -13,7 +17,7 @@ display_s *display;
 
 //SNI koder
 // lös så value 3 inte kan bli samma som value 1
-int* get_x_randoms(int returnAmount, int modulu) {
+int* get_x_randoms(int returnAmount, int modulu, int tickcount) {
     int* randoms = malloc(returnAmount * sizeof(int));
     vTaskDelay(pdMS_TO_TICKS(20));
     if (randoms == NULL) {
@@ -25,9 +29,10 @@ int* get_x_randoms(int returnAmount, int modulu) {
         int isUnique;
         do {
             isUnique = 1;
-            random = rand() % modulu;
+            random = tickcount % modulu;
             for (int j = 0; j < i; j++) {
                 if (random == randoms[j]) {
+                    tickcount = rand();
                     isUnique = 0;
                     break;
                 }
@@ -54,9 +59,16 @@ void chooseOne();
 void chooseTwo();
 void chooseThree();
 // läs värde från en pin, använd modulu(antalet alternativ) för att slumpa (0-4095)
+
+void syncLives(int lives);
 void app_main(void)
 {
-
+    gpio_reset_pin(16);
+    gpio_reset_pin(17);
+    gpio_reset_pin(5);
+    bLed1 = b_led_init(16, BL_LIGHT_ON, false);
+    bLed2 = b_led_init(17, BL_LIGHT_ON, false);
+    bLed3 = b_led_init(5, BL_LIGHT_ON, false);
     redBtn = button_init(2, GPIO_PULLUP);
     greenBtn = button_init(3, GPIO_PULLUP);
     blueBtn = button_init(4, GPIO_PULLUP);
@@ -72,10 +84,12 @@ void app_main(void)
     button_setOnPressed(redBtn, chooseOne);
     button_setOnPressed(greenBtn, chooseTwo);
     button_setOnPressed(blueBtn, chooseThree);
+    int lives = 3;
     while (1)
     {
         TickType_t currentTick = xTaskGetTickCount();
-
+        
+        syncLives(lives);
         updateRGB(rgb);
         button_update(redBtn);
         button_update(greenBtn);
@@ -98,12 +112,20 @@ void app_main(void)
                 else
                 {
                     ESP_LOGI(TAG, "Wrong, answear was: %d", correctPlacement);
+                    lives--;
+                    syncLives(lives);
+                    if (lives == 0)
+                    {
+                        ESP_LOGI(TAG, "Game Over");
+                        break;
+                    }
                 }
             }
             i++;
             
+            
             int myrandom = getRandom(currentTick, 10);
-            int *newRandoms = get_x_randoms(3, 10);
+            int *newRandoms = get_x_randoms(3, 10, currentTick);
             if (newRandoms != NULL)
             {
                 ESP_LOGI(TAG, "Random: %d", newRandoms[0]);
@@ -113,7 +135,7 @@ void app_main(void)
             else if(newRandoms == NULL)
             {
                 ESP_LOGE(TAG, "Error");
-                int *newRandoms = get_x_randoms(3, 10);
+                int *newRandoms = get_x_randoms(3, 10, currentTick);
             }
             
             // if (i == 10)
@@ -124,7 +146,7 @@ void app_main(void)
             char scoreStr[12];
             char myInt[12];
             snprintf(scoreStr, sizeof(scoreStr), "%d", score);
-            snprintf(myInt, sizeof(myInt), "%d", i);
+            snprintf(myInt, sizeof(myInt), "%d", lives);
             previousSwitch = currentTick;
             int placement = newRandoms[0] + newRandoms[1] + newRandoms[2];
             vTaskDelay(pdMS_TO_TICKS(1));
@@ -181,4 +203,34 @@ void chooseTwo(){
 }
 void chooseThree(){
     choise = 3;
+}
+void syncLives(int lives){
+    if(lives == 3)
+    {
+        b_led_setled(bLed1, BL_LIGHT_ON);
+        b_led_setled(bLed2, BL_LIGHT_ON);
+        b_led_setled(bLed3, BL_LIGHT_ON);
+    }
+    else
+    if (lives ==2)
+    {
+        b_led_setled(bLed1, BL_LIGHT_OFF);
+        b_led_setled(bLed2, BL_LIGHT_ON);
+        b_led_setled(bLed3, BL_LIGHT_ON);
+    }
+    else if (lives == 1)
+    {
+        b_led_setled(bLed1, BL_LIGHT_OFF);
+        b_led_setled(bLed2, BL_LIGHT_OFF);
+        b_led_setled(bLed3, BL_LIGHT_ON);
+    }
+    else if (lives == 0)
+    {
+        b_led_setled(bLed1, BL_LIGHT_OFF);
+        b_led_setled(bLed2, BL_LIGHT_OFF);
+        b_led_setled(bLed3, BL_LIGHT_OFF); 
+    }
+    b_led_update(bLed1);
+    b_led_update(bLed2);
+    b_led_update(bLed3);
 }
