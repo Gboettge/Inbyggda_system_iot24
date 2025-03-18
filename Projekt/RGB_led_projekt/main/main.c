@@ -38,16 +38,20 @@ void startGameOne()
 {
     vTaskDelay(pdMS_TO_TICKS(1000));
     ESP_LOGI(TAG, "Starting... %d", __LINE__);
-    gpio_reset_pin(16);
-    gpio_reset_pin(17);
+    gpio_reset_pin(0);
+    gpio_reset_pin(1);
     gpio_reset_pin(5);
-    bLed1 = b_led_init(18, BL_LIGHT_ON, false);
-    bLed2 = b_led_init(19, BL_LIGHT_ON, false);
-    bLed3 = b_led_init(5, BL_LIGHT_ON, false);
+    bLed1 = b_led_init(17, BL_LIGHT_ON, false);
+    bLed2 = b_led_init(16, BL_LIGHT_ON, false);
+    bLed3 = b_led_init(9, BL_LIGHT_ON, false);
     redBtn = button_init(2, GPIO_PULLUP);
     greenBtn = button_init(3, GPIO_PULLUP);
     blueBtn = button_init(4, GPIO_PULLUP);
     display = display_init();
+
+    /*
+    gameMaster = gameMaster_init(bLed1, bLed2, bLed3, redBtn, greenBtn, blueBtn, display);
+    */
     // greenBtn = button_init(3, GPIO_PULLUP);
     // blueBtn = button_init(4, GPIO_PULLUP);
     rgb = rgb_init();
@@ -62,9 +66,12 @@ void startGameOne()
     int score = 0;
     int i = -1;
     TickType_t previousSwitch = 0;
+    TickType_t OneSecond = 0;
     int lives = 3;
     syncLives(lives);
-    while (lives > 0)
+    int seconds = 60;
+    bool game = false;
+    while (lives > 0 && seconds > 0)
     {
         b_led_update(bLed1);
         b_led_update(bLed2);
@@ -75,14 +82,26 @@ void startGameOne()
         button_update(redBtn);
         button_update(greenBtn);
         button_update(blueBtn);
+        /*
+        gameMaster_update(gameMaster);
+        */
 
         vTaskDelay(pdMS_TO_TICKS(40));
         // if (button_isPressed(redBtn))
         // {
         //     if (currentTick - previousSwitch >= pdMS_TO_TICKS(500))
         //     {
+        if(game == true && currentTick - OneSecond >= pdMS_TO_TICKS(1000))
+        {
+            seconds--;
+            OneSecond = currentTick;
+            char myInt[12];
+            snprintf(myInt, sizeof(myInt), "%d", seconds);
+            display_update_time(display, myInt);
+        }
         if (choise != 0)
         {   
+            game = true;
             char* answear = NULL;
             if (correctPlacement != 0)
             {
@@ -134,7 +153,7 @@ void startGameOne()
             char scoreStr[12];
             char myInt[12];
             snprintf(scoreStr, sizeof(scoreStr), "%d", score);
-            snprintf(myInt, sizeof(myInt), "%d", lives);
+            snprintf(myInt, sizeof(myInt), "%d", seconds);
             previousSwitch = currentTick;
             int placement = newRandoms[0] + newRandoms[1] + newRandoms[2];
             vTaskDelay(pdMS_TO_TICKS(1));
@@ -173,6 +192,16 @@ void startGameOne()
             
         }
     }
+    syncLives(lives);
+    if (lives == 0){
+        display_update(display, "Game Over!");
+        display_update_time(display, " ");
+    }
+    if (seconds <= 0)
+    {
+        display_update(display, "Time's up!");
+        display_update_time(display, " ");
+    }
 
 }
 
@@ -207,7 +236,7 @@ void syncLives(int lives){
         b_led_setled(bLed2, BL_LIGHT_OFF);
         // b_led_setled(bLed3, BL_LIGHT_ON);
     }
-    else if (lives == 0)
+    else if (lives <= 0)
     {
         // b_led_setled(bLed1, BL_LIGHT_OFF);
         // b_led_setled(bLed2, BL_LIGHT_OFF);
