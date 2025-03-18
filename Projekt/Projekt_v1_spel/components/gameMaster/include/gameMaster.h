@@ -4,6 +4,7 @@
 #include "DISPLAY1.h"
 #include "RGB_led_component.h"
 #include "freertos/FreeRTOS.h"
+#include "guessTheColor.h"
 
 
 typedef enum{
@@ -26,12 +27,18 @@ typedef struct {
     gm_state currentState;
     gm_state nextState;     
     TickType_t previousTick;
+    guess_color_handle guess_color;
+    bool gameRunning;
 } gm;
 
 typedef gm* gm_handle;
 
-gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnThree, b_led_handle bLedOne, b_led_handle bLedTwo, b_led_handle bLedThree, display_handle display, RGB_handle rgb);
+gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnThree, b_led_handle bLedOne, b_led_handle bLedTwo, b_led_handle bLedThree, display_handle display, RGB_handle rgb, guess_color_handle guess_color);
 
 void gm_update(gm_handle gm);
+
+void gm_init_games(gm_handle gm);
+
+void gm_free_games(gm_handle gm);
 
 

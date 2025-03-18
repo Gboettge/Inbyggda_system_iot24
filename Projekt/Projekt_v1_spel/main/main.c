@@ -14,11 +14,13 @@
     b_led_handle bLedTwo;
     b_led_handle bLedThree;
     gm_handle gameMaster;
+    guess_color_handle gameOne;
     
 
     
 void app_main(void)
 {
+    printf("Initializing components...\n");
     bLedOne = b_led_init(17, BL_LIGHT_ON, false);
     bLedTwo = b_led_init(16, BL_LIGHT_ON, false);
     bLedThree = b_led_init(9, BL_LIGHT_ON, false);
@@ -27,10 +29,14 @@ void app_main(void)
     btnThree = button_init(4, GPIO_PULLUP);
     display = display_init();
     rgb = rgb_init();
-    gameMaster = gm_init(btnOne, btnTwo, btnThree, bLedOne, bLedTwo, bLedThree, display, rgb);
+    gameOne = guess_color_init(btnOne, btnTwo, btnThree, bLedOne, bLedTwo, bLedThree, display, rgb);
+    gameMaster = gm_init(btnOne, btnTwo, btnThree, bLedOne, bLedTwo, bLedThree, display, rgb, gameOne);
+    
+    printf("Components initialized.\n");
 
 
-    while(1){
+   
+   while(1){
         button_update(btnOne);
         button_update(btnTwo);
         button_update(btnThree);
