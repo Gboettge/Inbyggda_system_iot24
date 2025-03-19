@@ -41,6 +41,7 @@ typedef struct{
     lv_obj_t *leftCenter;
     lv_obj_t *leftBottom;
     lv_obj_t *rightTop;
+    lv_obj_t *rightCenter;
     lv_obj_t *rightBottom;
    
 }display_s;
@@ -50,10 +51,10 @@ typedef  display_s * display_handle;
 display_s *display_init();
 
 // void display_ui(display_s *disp);
-void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* score, char* time); 
+void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom);
 //leftTop, leftMid, leftButtom, rightTop, rightBottom
 
 void display_update(display_s *display, char* answear);
 void display_update_time(display_s *display, char* time);
 
-void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightBottom);
+void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom);

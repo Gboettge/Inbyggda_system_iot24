@@ -14,6 +14,7 @@ guess_color_handle guess_color_init(button_handle btnOne, button_handle btnTwo, 
     newGame->currentState = GUESS_COLOR_START;
 
     newGame->lives = 3;
+    newGame->choise = 0;
     newGame->correctPlacement = -1;
     newGame->score = 0;
     newGame->seconds = STARTUP_DURATION/1000;
@@ -40,14 +41,14 @@ bool guess_color_play(guess_color_handle g1)
         display_update_time(g1->display, myInt);
         if (g1->currentState == GUESS_COLOR_START)
         {
-            display_update_fullscreen(g1->display, "Wellcome", NULL, "Starts in:", NULL, myInt);
+            display_update_fullscreen(g1->display, "Wellcome", NULL, "Starts in:", NULL, NULL, myInt);
             // display_ui(g1->display, "Wellcome", NULL, "Starts in:", NULL, myInt);
         }
         if (g1->currentState == GUESS_COLOR_TIMES_UP){
-            display_update_fullscreen(g1->display, "New score:", "Times up!", "Return in:", myScore, myInt);
+            display_update_fullscreen(g1->display, "Time's up!", "Score:", "Return in:", NULL, myScore, myInt);
         }
         if (g1->currentState == GUESS_COLOR_GAMEOVER){
-            display_update_fullscreen(g1->display, "New score:", "GameOver!", "Return in:", myScore, myInt);
+            display_update_fullscreen(g1->display, "Game Over 0 lives", "Score:", "Return in:", NULL, myScore, myInt);
         }
     }
     syncLives(g1);
@@ -83,10 +84,15 @@ bool guess_color_play(guess_color_handle g1)
         break;
 
     case GUESS_COLOR_GAME:
-        if (g1->isWaiting == false && currentTick - g1->previousTick >= pdMS_TO_TICKS(2000))
+        if(g1->seconds <= 0){
+            g1->nextState = GUESS_COLOR_TIMES_UP;
+            break;
+        }
+        if (g1->isWaiting == false && currentTick - g1->previousTick >= pdMS_TO_TICKS(1500))
         {
             g1->nextState = GUESS_COLOR_GENERATE_NEW;
             g1->isWaiting = true;
+            break;
         }
         if (g1->choise != 0 && g1->isWaiting == true)
         {
@@ -113,9 +119,9 @@ bool guess_color_play(guess_color_handle g1)
                     }
                 }
                 display_update(g1->display, answear);
+                g1->choise = 0;
+                g1->isWaiting = false;
             }
-            g1->choise = 0;
-            g1->isWaiting = false;
         }
         else
         {
@@ -160,22 +166,22 @@ bool guess_color_play(guess_color_handle g1)
         vTaskDelay(pdMS_TO_TICKS(1));
         if (newPlacement == 0)
         {
-            display_ui(g1->display, color_names[zero], color_names[one], color_names[two], scoreStr, myInt);
+            display_ui(g1->display, color_names[zero], color_names[one], color_names[two], scoreStr, NULL, myInt);
             g1->correctPlacement = 1;
         }
         else if (newPlacement == 1)
         {
-            display_ui(g1->display, color_names[two], color_names[zero], color_names[one], scoreStr, myInt);
+            display_ui(g1->display, color_names[two], color_names[zero], color_names[one], scoreStr, NULL, myInt);
             g1->correctPlacement = 2;
         }
         else if (newPlacement == 2)
         {
-            display_ui(g1->display, color_names[one], color_names[two], color_names[zero], scoreStr, myInt);
+            display_ui(g1->display, color_names[one], color_names[two], color_names[zero], scoreStr, NULL, myInt);
             g1->correctPlacement = 3;
         }
         else
         {
-            display_ui(g1->display, "Error", "Error", "color_names[zero]", scoreStr, myInt);
+            display_ui(g1->display, "Error", "Error", "color_names[zero]", scoreStr, NULL, myInt);
         }
         free(newRandoms);
         vTaskDelay(pdMS_TO_TICKS(1));

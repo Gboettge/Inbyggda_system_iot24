@@ -40,11 +40,11 @@ void app_main(void)
         button_update(btnOne);
         button_update(btnTwo);
         button_update(btnThree);
+        updateRGB(rgb);
+        gm_update(gameMaster);
         b_led_update(bLedOne);
         b_led_update(bLedTwo);
         b_led_update(bLedThree);
-        updateRGB(rgb);
-        gm_update(gameMaster);
         vTaskDelay(pdMS_TO_TICKS(30));
         // setRGB(rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
     }
