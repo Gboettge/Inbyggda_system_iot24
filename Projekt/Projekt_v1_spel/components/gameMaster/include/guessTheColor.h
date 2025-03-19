@@ -12,6 +12,7 @@ typedef enum{
     GUESS_COLOR_START,
     GUESS_COLOR_GAME,
     GUESS_COLOR_GAMEOVER,
+    GUESS_COLOR_TIMES_UP,
     GUESS_COLOR_GENERATE_NEW
 }guess_state;
 
@@ -36,6 +37,7 @@ typedef struct {
     int score;
     int seconds;
     bool isGame;
+    bool isWaiting;
     int choise;
 } guess_color_t;
 
