@@ -14,6 +14,7 @@ typedef enum{
     STATE_OFF,
     DEBOUNCE_STATE_OFF
 }state_e;
+typedef void(*onbutton_f)(int, void*);
 
 typedef struct {
     int pin;
@@ -21,8 +22,10 @@ typedef struct {
     strapping_mode mode;
     int latch;
     bool pressed;
-    void (*onPressed)(int pin);
-    void (*onReleased)(int pin);
+    onbutton_f onPressed;
+    onbutton_f onReleased;
+    void* onPressed_arg;
+    void* onReleased_arg;
     state_e current_state;
     state_e next_state;
     state_e previous_state;
@@ -38,9 +41,9 @@ void button_update(button_handle button);
 
 bool button_isPressed (button_handle button);
 
-void button_setOnReleased (button_handle button, void(*onReleased)(int pin));
+void button_setOnReleased (button_handle button, onbutton_f onReleased, void* arg);
 
-void button_setOnPressed (button_handle button, void(*onPressed)(int pin));
+void button_setOnPressed (button_handle button, onbutton_f onPressed, void* arg);
 
 void button_print_press_num (int pin);
 

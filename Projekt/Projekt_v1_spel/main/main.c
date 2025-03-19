@@ -21,11 +21,11 @@
 void app_main(void)
 {
     printf("Initializing components...\n");
-    bLedOne = b_led_init(17, BL_LIGHT_ON, false);
-    bLedTwo = b_led_init(16, BL_LIGHT_ON, false);
+    bLedOne = b_led_init(2, BL_LIGHT_ON, false);
+    bLedTwo = b_led_init(3, BL_LIGHT_ON, false);
     bLedThree = b_led_init(9, BL_LIGHT_ON, false);
-    btnOne = button_init(2, GPIO_PULLUP);
-    btnTwo = button_init(3, GPIO_PULLUP);
+    btnOne = button_init(13, GPIO_PULLUP);
+    btnTwo = button_init(21, GPIO_PULLUP);
     btnThree = button_init(4, GPIO_PULLUP);
     display = display_init();
     rgb = rgb_init();

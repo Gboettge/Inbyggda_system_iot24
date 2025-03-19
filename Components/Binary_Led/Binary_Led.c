@@ -86,8 +86,9 @@ void b_led_update(b_led_handle led)
 void b_led_setled(b_led_handle led, b_led_light_e light_mode){
     
     led->light_mode = light_mode;
-    if(BL_LIGHT_ON){
+    if(light_mode == BL_LIGHT_ON){
         led->current_state = BL_ON;
+        
     }
     else{
         led->current_state = BL_OFF;

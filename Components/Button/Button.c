@@ -58,7 +58,7 @@ void button_update(button_handle button)
             button->next_state = STATE_OFF;
             if (button->onReleased != NULL)
             {
-                button->onReleased(button->pin);
+                button->onReleased(button->pin, button->onReleased_arg);
             }
             else {
                 printf("Non function button: %d released \n", button->pin);
@@ -80,7 +80,7 @@ void button_update(button_handle button)
             button->next_state = STATE_ON;
             if (button->onPressed != NULL)
             {
-                button->onPressed(button->pin);
+                button->onPressed(button->pin, button->onPressed_arg);
             }
             else {
                 printf("Non function button: %d Pressed \n", button->pin);
@@ -102,10 +102,12 @@ bool button_isPressed (button_handle button){
     return button->pressed;
 }
 
-void button_setOnReleased (button_handle button, void(*onReleased)(int pin)){
+void button_setOnReleased (button_handle button, onbutton_f onReleased, void* arg){
+    button->onReleased_arg = arg;
     button->onReleased = onReleased;
 }
-void button_setOnPressed (button_handle button, void(*onPressed)(int pin)){
+void button_setOnPressed (button_handle button, onbutton_f onPressed, void* arg){
+    button->onPressed_arg = arg;
     button->onPressed = onPressed;
 }
 

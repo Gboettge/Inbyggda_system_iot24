@@ -212,6 +212,34 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
     lv_label_set_text(display->rightBottom, time);
 }
 
+void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightBottom)
+{
+    if(newleftTop == NULL){
+        newleftTop = "  ";
+    }
+    if(newleftMid == NULL){
+        newleftMid = "  ";
+    }
+    
+    if(newleftButtom == NULL){
+        newleftButtom = "  ";
+    }
+    
+    if(newRightTop == NULL){
+        newRightTop = "  ";
+    }
+    
+    if(newRightBottom == NULL){
+        newRightBottom = "  ";
+    }
+    
+    lv_label_set_text(display->leftTop, newleftTop);
+    lv_label_set_text(display->leftCenter, newleftMid);
+    lv_label_set_text(display->leftBottom, newleftButtom);
+    lv_label_set_text(display->rightTop, newRightTop);
+    lv_label_set_text(display->rightBottom, newRightBottom);
+}
+
 
 void display_update(display_s *display, char* answear)
 {   
