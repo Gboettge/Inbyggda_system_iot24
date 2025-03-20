@@ -60,3 +60,6 @@ void display_update_time(display_s *display, char* time);
 void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom);
 
 void display_clear(display_s *display);
+
+void display_get_parent(display_s *display);
+void display_set_parent(display_s *display);

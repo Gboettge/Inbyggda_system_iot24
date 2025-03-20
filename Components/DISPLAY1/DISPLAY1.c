@@ -275,6 +275,13 @@ void display_clear(display_s *display){
     lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
     lv_obj_clean(scr);
 }
+
+void display_get_parent(display_s *display){
+    
+}
+void display_set_parent(display_s *display){
+    
+}
 // lv_obj_t *label = lv_label_create(scr);
 // lv_obj_t *label1 = lv_label_create(scr);
 // lv_obj_t *label2 = lv_label_create(scr);

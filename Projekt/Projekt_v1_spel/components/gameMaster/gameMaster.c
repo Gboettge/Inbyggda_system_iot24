@@ -12,6 +12,8 @@ gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnT
     newGame->display = display;
     newGame->rgb = rgb;
 
+    newGame->guess_color = guess_color; //
+
     newGame->previousState = GM_CYCLE_COLORS;
     newGame->currentState = GM_MENU;
     newGame->gameRunning = false;
@@ -38,15 +40,23 @@ void gm_update(gm_handle gm)
             button_setOnPressed(gm->btnTwo, gm_choise_two, (void *)gm);
             button_setOnPressed(gm->btnThree, gm_choise_three, (void *)gm);
             gm->firstTime = false;
+            
+            // lv_obj_set_parent(gm->guess_color->display->leftTop, gm->display->leftTop);
         }
         if (gm->previousState != gm->currentState)
         {
             gm->previousTick = current_tick;
+            if (lv_obj_is_valid(gm->display->leftTop)) {
+                lv_label_set_text(gm->display->leftTop, "New Text");
+            }
             if (gm->display != NULL) {
                 printf("Clearing display\n");
+                // free(gm->display);
+                // display_init(gm->display);
                 // display_clear(gm->display); // Rensa displayen innan uppdatering
             } else {
                 printf("Display is NULL\n");
+                gm->display = display_init();
             }
             display_update_fullscreen(gm->display, "Play", "Highscore", "Show RGB", NULL, NULL, NULL);
             setRGB(gm->rgb, colors[gm->currentState].red, colors[gm->currentState].green, colors[gm->currentState].blue);
@@ -73,11 +83,11 @@ void gm_update(gm_handle gm)
         gm->nextState = gm->currentState;
         /* code */
         break;
-
-    case GM_GAME:
+        
+        case GM_GAME:
         if (gm->previousState != gm->currentState)
         {
-            // gm_init_games(gm);
+            gm_init_games(gm);
             gm->previousTick = current_tick;
             // break;
         }
@@ -91,7 +101,8 @@ void gm_update(gm_handle gm)
             gm->nextState = GM_NONE;
             gm->gameRunning = false;
             gm->previousTick = current_tick;
-            // gm_free_games(gm);
+            // lv_obj_get_disp(gm->guess_color->display->disp);
+            gm_free_games(gm);
 
             // gm->display = display_init();
         }
@@ -136,6 +147,7 @@ void gm_update(gm_handle gm)
     case GM_NONE:
         gm->choise = 0;
         gm->firstTime = true; //NY
+        // display_reset(gm->display);
         gm->nextState = GM_MENU;
     }
     gm->previousState = gm->currentState;
