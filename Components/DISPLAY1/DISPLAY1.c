@@ -270,6 +270,11 @@ void display_update_time(display_s *display, char* time)
     // lv_label_set_text(rightBottom, time);
     // lv_task_handler();
 }
+
+void display_clear(display_s *display){
+    lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
+    lv_obj_clean(scr);
+}
 // lv_obj_t *label = lv_label_create(scr);
 // lv_obj_t *label1 = lv_label_create(scr);
 // lv_obj_t *label2 = lv_label_create(scr);

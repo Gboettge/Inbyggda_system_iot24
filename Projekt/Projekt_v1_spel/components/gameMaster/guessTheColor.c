@@ -10,6 +10,7 @@ guess_color_handle guess_color_init(button_handle btnOne, button_handle btnTwo, 
     newGame->btnThree = btnThree;
     newGame->display = display;
     newGame->rgb = rgb;
+
     newGame->previousState = GUESS_COLOR_GENERATE_NEW;
     newGame->currentState = GUESS_COLOR_START;
 
@@ -193,9 +194,9 @@ bool guess_color_play(guess_color_handle g1)
         if (g1->previousState != g1->currentState)
         {
             setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
-            b_led_blink(g1->bLedOne, 300, 300);
-            b_led_blink(g1->bLedTwo, 300, 300);
-            b_led_blink(g1->bLedThree, 300, 300);
+            b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
+            b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
+            b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
             
             g1->seconds = STARTUP_DURATION / 1000;
             
@@ -205,6 +206,7 @@ bool guess_color_play(guess_color_handle g1)
         }
         if (currentTick - g1->previousTick >= pdMS_TO_TICKS(STARTUP_DURATION))
         {
+            display_clear(g1->display);
             g1->isGame = false;
             g1->nextState = GUESS_COLOR_START;
             g1->previousTick = currentTick;
@@ -214,20 +216,21 @@ bool guess_color_play(guess_color_handle g1)
             g1->nextState = g1->currentState;
         }
         break;
-    case GUESS_COLOR_TIMES_UP:
+        case GUESS_COLOR_TIMES_UP:
         if (g1->previousState != g1->currentState)
         {
             g1->seconds = STARTUP_DURATION / 1000;
             
             setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
-            b_led_blink(g1->bLedOne, 300, 300);
-            b_led_blink(g1->bLedTwo, 300, 300);
-            b_led_blink(g1->bLedThree, 300, 300);
+            // b_led_blink(g1->bLedOne, 300, 300);
+            // b_led_blink(g1->bLedTwo, 300, 300);
+            // b_led_blink(g1->bLedThree, 300, 300);
             g1->previousTick = currentTick;
             // break;
         }
         if (currentTick - g1->previousTick >= pdMS_TO_TICKS(STARTUP_DURATION))
         {
+            display_clear(g1->display);
             g1->isGame = false;
             g1->nextState = GUESS_COLOR_START;
             g1->previousTick = currentTick;
@@ -247,18 +250,21 @@ void button_choise_one(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 1;
+    printf("%d game choise" , h->choise);
     // h->currentState = GUESS_COLOR_GENERATE_NEW;
 }
 void button_choise_two(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 2;
+    printf("%d game choise" , h->choise);
     // h->lives--;
 }
 void button_choise_three(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 3;
+    printf("%d game choise" , h->choise);
     // h->lives = 3;
 }
 

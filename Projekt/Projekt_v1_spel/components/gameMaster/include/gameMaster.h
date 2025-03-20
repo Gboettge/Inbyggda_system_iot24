@@ -11,7 +11,8 @@ typedef enum{
     GM_MENU,
     GM_GAME,
     GM_HIGHSCORE,
-    GM_CYCLE_COLORS
+    GM_CYCLE_COLORS,
+    GM_NONE
 }gm_state;
 
 typedef struct {
@@ -34,13 +35,14 @@ typedef struct {
     int score;
     int seconds;
     int choise;
+    bool firstTime;
 } gm;
 
 typedef gm* gm_handle;
 
-void gm_choise_one(int pin, void *arg);
-void gm_choise_two(int pin, void *arg);
-void gm_choise_three(int pin, void *arg);
+void gm_choise_one();
+void gm_choise_two();
+void gm_choise_three();
 
 gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnThree, b_led_handle bLedOne, b_led_handle bLedTwo, b_led_handle bLedThree, display_handle display, RGB_handle rgb, guess_color_handle guess_color);
 
