@@ -131,11 +131,11 @@ display_s *display_init(){
 
 void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom)
 {
+    // lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     // lv_disp_remove(display->disp);
     // lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
     
     // lv_obj_clean(scr);
-    lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     // lv_obj_t *leftTop = NULL;
     // lv_obj_t *leftCenter = NULL;
     // lv_obj_t *leftBottom = NULL;
@@ -190,7 +190,7 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
 
 void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom)
 {
-    lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
+    // lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     if(newleftTop == NULL){
         newleftTop = "  ";
     }
@@ -226,7 +226,7 @@ void display_update(display_s *display, char* answear)
 {   
     // lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
     // lv_obj_clean(scr);
-    lv_obj_align(display->leftCenter, LV_ALIGN_CENTER, 10, 0);
+    // lv_obj_align(display->leftCenter, LV_ALIGN_CENTER, 10, 0);
     lv_label_set_text(display->leftTop, "    ");
     lv_label_set_text(display->leftCenter, answear);
     lv_label_set_text(display->leftBottom, "    ");
