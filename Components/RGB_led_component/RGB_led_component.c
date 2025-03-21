@@ -7,7 +7,7 @@ color colors[] = {
     {0, 0, 255}, //blue
     {255, 150, 0}, //yellow
     {255, 0, 255}, //Magenta
-    {0, 255, 255}, //cyan
+    {0, 230, 255}, //cyan
     {255, 255, 255}, //white
     {75 ,0 ,130}, //purple
     {230, 29, 0},  //orange 9
@@ -32,7 +32,7 @@ const char *color_names[] = {
     "GREEN",
     "BLUE",
     "YELLOW",
-    "MAGENTA",
+    "PINK",
     "CYAN",
     "WHITE",
     "PURPLE",
