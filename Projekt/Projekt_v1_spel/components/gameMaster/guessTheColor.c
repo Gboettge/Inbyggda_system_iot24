@@ -14,8 +14,6 @@ guess_color_handle guess_color_init(button_handle btnOne, button_handle btnTwo, 
     newGame->previousState = GUESS_COLOR_GENERATE_NEW;
     newGame->currentState = GUESS_COLOR_START;
 
-    newGame->display->bus_config.lp_source_clk = 8;
-
     newGame->lives = 3;
     newGame->choise = 0;
     newGame->correctPlacement = -1;
@@ -23,10 +21,6 @@ guess_color_handle guess_color_init(button_handle btnOne, button_handle btnTwo, 
     newGame->seconds = STARTUP_DURATION/1000;
     newGame->isGame = true;
     newGame->isWaiting = true;
-
-    // button_setOnPressed(newGame->btnOne, button_choise_one, (void*)newGame);
-    // button_setOnPressed(newGame->btnTwo, button_choise_two, (void*)newGame);
-    // button_setOnPressed(newGame->btnThree, button_choise_three, (void*)newGame);
 
     return newGame;
 }
@@ -87,7 +81,7 @@ bool guess_color_play(guess_color_handle g1)
             g1->nextState = GUESS_COLOR_TIMES_UP;
             break;
         }
-        if (g1->isWaiting == false && currentTick - g1->previousTick >= pdMS_TO_TICKS(1500))
+        if (g1->isWaiting == false && currentTick - g1->previousTick >= pdMS_TO_TICKS(1200))
         {
             g1->nextState = GUESS_COLOR_GENERATE_NEW;
             g1->isWaiting = true;
@@ -109,7 +103,7 @@ bool guess_color_play(guess_color_handle g1)
                 }
                 else
                 {
-                    // ESP_LOGI(TAG, "Wrong, answear was: %d", correctPlacement);
+                    // ESP_LOGI(TAG, "Wrong, answear was: %d", g1->correctPlacement);
                     answear = "Wrong";
                     g1->lives--;
                     syncLives(g1);
@@ -144,59 +138,46 @@ bool guess_color_play(guess_color_handle g1)
             int *newRandoms = get_x_randoms(3, COLOR_SIZE, currentTick);
         }
 
-        // if (i == 10)
-        // {
-        //     i = 0;
-        // }
-        vTaskDelay(pdMS_TO_TICKS(1));
         char scoreStr[12];
         char myInt[12];
-        snprintf(scoreStr, sizeof(scoreStr), "%d", g1->score);
-        snprintf(myInt, sizeof(myInt), "%d", g1->seconds);
+        snprintf(scoreStr, sizeof(scoreStr), "%d", g1->score); //konvertera score till string för display
+        snprintf(myInt, sizeof(myInt), "%d", g1->seconds); //konvertera sekunder till string för display
         g1->previousTick = currentTick;
         int placement = newRandoms[0] + newRandoms[1] + newRandoms[2];
-        vTaskDelay(pdMS_TO_TICKS(1));
-        int newPlacement = getRandom(placement, 3);
-        int zero = newRandoms[0];
+        int newPlacement = getRandom(placement, 3); //slumpar placeringen på skärmen, returnerar: 0, 1 alt 2
+        int correct = newRandoms[0];
         int one = newRandoms[1];
         int two = newRandoms[2];
-        ESP_LOGI(TAG, "Placement: %d\n", newPlacement);
-        ESP_LOGI(TAG, "randoms = %d, %d, %d\n", zero, one, two);
-        setRGB(g1->rgb, colors[zero].red, colors[zero].green, colors[zero].blue);
-        vTaskDelay(pdMS_TO_TICKS(1));
-        if (newPlacement == 0)
+        ESP_LOGI(TAG, "Correct placement: %d\n", newPlacement);
+        ESP_LOGI(TAG, "randoms = %d, %d, %d\n", correct, one, two);
+        setRGB(g1->rgb, colors[correct].red, colors[correct].green, colors[correct].blue);
+        if (newPlacement == 0) //välj plats på colors[correct] (det korrekt satta rgb värdet)
         {
-            display_ui(g1->display, color_names[zero], color_names[one], color_names[two], scoreStr, NULL, myInt);
+            display_ui(g1->display, color_names[correct], color_names[one], color_names[two], scoreStr, NULL, myInt);
             g1->correctPlacement = 1;
         }
         else if (newPlacement == 1)
         {
-            display_ui(g1->display, color_names[two], color_names[zero], color_names[one], scoreStr, NULL, myInt);
+            display_ui(g1->display, color_names[two], color_names[correct], color_names[one], scoreStr, NULL, myInt);
             g1->correctPlacement = 2;
         }
         else if (newPlacement == 2)
         {
-            display_ui(g1->display, color_names[one], color_names[two], color_names[zero], scoreStr, NULL, myInt);
+            display_ui(g1->display, color_names[one], color_names[two], color_names[correct], scoreStr, NULL, myInt);
             g1->correctPlacement = 3;
         }
-        else
-        {
-            display_ui(g1->display, "Error", "Error", "color_names[zero]", scoreStr, NULL, myInt);
-        }
         free(newRandoms);
-        vTaskDelay(pdMS_TO_TICKS(1));
-        // choise = 0;
         g1->nextState = GUESS_COLOR_GAME;
-
         break;
+
         case GUESS_COLOR_GAMEOVER:
         if (g1->previousState != g1->currentState)
         {
             setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
-            b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
-            b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
-            b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
-            printf("Display state: %p\n", g1->display);
+            // b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
+            // b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
+            // b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
+            // printf("Display state: %p\n", g1->display);
             
             g1->seconds = STARTUP_DURATION / 1000;
             g1->previousTick = currentTick;
@@ -236,6 +217,10 @@ bool guess_color_play(guess_color_handle g1)
         display_clear(g1->display);
         g1->nextState = GUESS_COLOR_START;
         g1->isGame = false;
+        if(g1->previousState == GUESS_COLOR_TIMES_UP){
+            g1->lives = 0;
+            syncLives(g1);
+        }
         break;
     }
     g1->previousState = g1->currentState;
@@ -247,22 +232,19 @@ void button_choise_one(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 1;
-    printf("%d game choise" , h->choise);
-    // h->currentState = GUESS_COLOR_GENERATE_NEW;
+    // printf("%d game choise\n" , h->choise);
 }
 void button_choise_two(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 2;
-    printf("%d game choise" , h->choise);
-    // h->lives--;
+    // printf("%d game choise\n" , h->choise);
 }
 void button_choise_three(int pin, void *arg)
 {
     guess_color_handle h = (guess_color_handle)arg;
     h->choise = 3;
-    printf("%d game choise" , h->choise);
-    // h->lives = 3;
+    // printf("%d game choise\n" , h->choise);
 }
 
 void syncLives(guess_color_handle g1)
@@ -293,6 +275,8 @@ void syncLives(guess_color_handle g1)
     {
         // ESP_LOGI(TAG, "Lives: %d", g1->lives);
         b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
+        b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
+        b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
         // b_led_update(g1->bLedOne);
         // setRGB(g1->rgb, colors[6].red, colors[6].green, colors[6].blue);
         // vTaskDelay(pdMS_TO_TICKS(10));

@@ -63,9 +63,6 @@ void display_update_fullscreen(display_s *display, char* newleftTop, char* newle
 
 void display_clear(display_s *display);
 
-void display_get_parent(display_s *display);
-void display_set_parent(display_s *display);
-
 void display_free(display_s *display);
 
 void display_recreate(display_s *display);

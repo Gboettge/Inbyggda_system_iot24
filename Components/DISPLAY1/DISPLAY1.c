@@ -19,11 +19,11 @@ display_s *display_init(){
         esp_lcd_panel_io_i2c_config_t io_config = {
             .dev_addr = EXAMPLE_I2C_HW_ADDR,
             .scl_speed_hz = EXAMPLE_LCD_PIXEL_CLOCK_HZ,
-            .control_phase_bytes = 1,               // According to SSD1306 datasheet
-            .lcd_cmd_bits = EXAMPLE_LCD_CMD_BITS,   // According to SSD1306 datasheet
-            .lcd_param_bits = EXAMPLE_LCD_CMD_BITS, // According to SSD1306 datasheet
+            .control_phase_bytes = 1,               
+            .lcd_cmd_bits = EXAMPLE_LCD_CMD_BITS,   
+            .lcd_param_bits = EXAMPLE_LCD_CMD_BITS, 
    
-            .dc_bit_offset = 6,                     // According to SSD1306 datasheet
+            .dc_bit_offset = 6,                     
    
         };
         ESP_ERROR_CHECK(esp_lcd_new_panel_io_i2c(i2c_bus, &io_config, &io_handle));
@@ -45,10 +45,6 @@ display_s *display_init(){
         ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
         ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
         ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
-    
-    #if CONFIG_EXAMPLE_LCD_CONTROLLER_SH1107
-        ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_handle, true));
-    #endif
     
         ESP_LOGI(TAG, "Initialize LVGL");
         const lvgl_port_cfg_t lvgl_cfg = ESP_LVGL_PORT_INIT_CONFIG();
@@ -72,21 +68,10 @@ display_s *display_init(){
         lv_disp_set_rotation(disp, LV_DISP_ROT_NONE);
         display_s *newDisp =pvPortMalloc(sizeof(display_s));
         newDisp->disp = disp;
-        newDisp->panel_handle = panel_handle;
-        
-    /* Rotation of the screen */
 
     ESP_LOGI(TAG, "Display LVGL Scroll Text");
-    // Lock the mutex due to the LVGL APIs are not thread-safe
     if (lvgl_port_lock(0)) {
-        // display_ui(disp);
-        // Release the mutex
         lvgl_port_unlock();
-        // newDisp->leftTop = NULL;
-        // newDisp->leftCenter = NULL;
-        // newDisp->leftBottom = NULL;
-        // newDisp->rightTop = NULL;
-        // newDisp->rightBottom = NULL;
     }
     lv_obj_t *scr = lv_disp_get_scr_act(newDisp->disp);
 
@@ -132,16 +117,6 @@ display_s *display_init(){
 
 void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom)
 {
-    // lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
-    // lv_disp_remove(display->disp);
-    // lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
-    
-    // lv_obj_clean(scr);
-    // lv_obj_t *leftTop = NULL;
-    // lv_obj_t *leftCenter = NULL;
-    // lv_obj_t *leftBottom = NULL;
-    // lv_obj_t *rightTop = NULL;
-    // lv_obj_t *rightBottom = NULL;
     char newQ1[12];
     char newQ2[12];
     char newQ3[12];
@@ -191,7 +166,6 @@ void display_ui(display_s *display, char* newleftTop, char* newleftMid, char* ne
 
 void display_update_fullscreen(display_s *display, char* newleftTop, char* newleftMid, char* newleftButtom, char* newRightTop, char* newRightCenter, char* newRightBottom)
 {
-    // lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
     if(newleftTop == NULL){
         newleftTop = "  ";
     }
@@ -225,51 +199,18 @@ void display_update_fullscreen(display_s *display, char* newleftTop, char* newle
 
 void display_update(display_s *display, char* answear)
 {   
-    // lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
-    // lv_obj_clean(scr);
-    // lv_obj_align(display->leftCenter, LV_ALIGN_CENTER, 10, 0);
     lv_label_set_text(display->leftTop, "    ");
     lv_label_set_text(display->leftCenter, answear);
     lv_label_set_text(display->leftBottom, "    ");
     lv_label_set_text(display->rightTop, "    ");
     lv_label_set_text(display->rightCenter, "    ");
     lv_label_set_text(display->rightBottom, "    ");
-    
-    // lv_label_set_text(display->rightBottom, "");
-    // lv_label_set_text(display->leftCenter, answear);
-    
-    // lv_obj_t *label = lv_label_create(scr);
-    // lv_obj_set_width(label, display->disp->driver->hor_res);
-    // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-    // lv_task_handler();
 }
 void display_update_time(display_s *display, char* time)
 {
     if(display->rightBottom != NULL){
         lv_label_set_text(display->rightBottom, time);
     }
-    // if(display->rightBottom == NULL){
-    //     lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
-    //     display->rightBottom = lv_label_create(scr);
-    //     lv_label_set_long_mode(display->rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-    //     lv_obj_set_width(display->rightBottom, display->disp->driver->hor_res/5);
-    //     lv_obj_align(display->rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
-    //     lv_label_set_text(display->rightBottom, time);
-    // }
-    // else{
-    // }
-    // lv_obj_t *label = lv_label_create(scr);
-    // lv_obj_set_width(label, display->disp->driver->hor_res);
-    // lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
-    // lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
-    // lv_obj_t *rightBottom = lv_label_create(scr);
-    // lv_obj_clean(rightBottom);
-    // rightBottom = lv_label_create(scr);
-    // lv_label_set_long_mode(rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
-    // lv_obj_set_width(rightBottom, display->disp->driver->hor_res/5);
-    // lv_obj_align(rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
-    // lv_label_set_text(rightBottom, time);
-    // lv_task_handler();
 }
 
 void display_clear(display_s *display){
@@ -277,46 +218,40 @@ void display_clear(display_s *display){
     lv_obj_clean(scr);
 }
 
-void display_get_parent(display_s *display){
-    
-}
-void display_set_parent(display_s *display){
-    
-}
 
 void display_free(display_s *display){
     free(display);
-
+    
 }
 
 void display_recreate(display_s *display){
     lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
-
+    
     display->leftTop = lv_label_create(scr);
     lv_label_set_long_mode(display->leftTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->leftTop, display->disp->driver->hor_res * 4 / 5);
     lv_obj_align(display->leftTop, LV_ALIGN_TOP_LEFT, 0, 0);
-
+    
     display->leftCenter = lv_label_create(scr);
     lv_label_set_long_mode(display->leftCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->leftCenter, display->disp->driver->hor_res * 4 / 5);
     lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
-
+    
     display->leftBottom = lv_label_create(scr);
     lv_label_set_long_mode(display->leftBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->leftBottom, display->disp->driver->hor_res * 4 / 5);
     lv_obj_align(display->leftBottom, LV_ALIGN_BOTTOM_LEFT, 0, 0);
-
+    
     display->rightTop = lv_label_create(scr);
     lv_label_set_long_mode(display->rightTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->rightTop, display->disp->driver->hor_res / 5);
     lv_obj_align(display->rightTop, LV_ALIGN_TOP_RIGHT, 0, 0);
-
+    
     display->rightCenter = lv_label_create(scr);
     lv_label_set_long_mode(display->rightCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->rightCenter, display->disp->driver->hor_res / 5);
     lv_obj_align(display->rightCenter, LV_ALIGN_RIGHT_MID, 0, 0);
-
+    
     display->rightBottom = lv_label_create(scr);
     lv_label_set_long_mode(display->rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
     lv_obj_set_width(display->rightBottom, display->disp->driver->hor_res / 5);
@@ -339,3 +274,27 @@ void display_recreate(display_s *display){
 // lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
 // lv_obj_align(label1, LV_ALIGN_CENTER, 0, 0);
 // lv_obj_align(label2, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+//gammal display_update();
+// if(display->rightBottom == NULL){
+//     lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
+//     display->rightBottom = lv_label_create(scr);
+//     lv_label_set_long_mode(display->rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+//     lv_obj_set_width(display->rightBottom, display->disp->driver->hor_res/5);
+//     lv_obj_align(display->rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+//     lv_label_set_text(display->rightBottom, time);
+// }
+// else{
+// }
+// lv_obj_t *label = lv_label_create(scr);
+// lv_obj_set_width(label, display->disp->driver->hor_res);
+// lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
+// lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
+// lv_obj_t *rightBottom = lv_label_create(scr);
+// lv_obj_clean(rightBottom);
+// rightBottom = lv_label_create(scr);
+// lv_label_set_long_mode(rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+// lv_obj_set_width(rightBottom, display->disp->driver->hor_res/5);
+// lv_obj_align(rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+// lv_label_set_text(rightBottom, time);
+// lv_task_handler();

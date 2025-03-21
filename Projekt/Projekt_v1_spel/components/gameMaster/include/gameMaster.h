@@ -28,10 +28,6 @@ typedef struct {
     b_led_handle bLedThree;
     guess_color_handle guess_color;
 
-    esp_lcd_panel_handle_t panel_handle;
-
-    lvgl_port_display_cfg_t disp_cfg;
-
     gm_state previousState;     
     gm_state currentState;
     gm_state nextState;     
@@ -55,10 +51,10 @@ gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnT
 
 void gm_update(gm_handle gm);
 
-void gm_init_games(gm_handle gm);
+void gm_init_games(gm_handle gm); //init för guess_color
 
-void gm_free_games(gm_handle gm);
+void gm_free_games(gm_handle gm); //frigör guess_color
 
-void gm_get_guess_highscore(gm_handle gm);
+void gm_get_guess_highscore(gm_handle gm); //hämtar score från guess_color (spelet)
 
 

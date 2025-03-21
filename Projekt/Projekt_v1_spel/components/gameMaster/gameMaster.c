@@ -12,9 +12,7 @@ gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnT
     newGame->display = display;
     newGame->rgb = rgb;
 
-    newGame->display->bus_config.lp_source_clk = I2C_CLK_SRC_DEFAULT;
-
-    newGame->guess_color = guess_color; //
+    newGame->guess_color = guess_color;
 
     newGame->previousState = GM_CYCLE_COLORS;
     newGame->currentState = GM_MENU;
@@ -43,18 +41,12 @@ void gm_update(gm_handle gm)
             button_setOnPressed(gm->btnTwo, gm_choise_two, (void *)gm);
             button_setOnPressed(gm->btnThree, gm_choise_three, (void *)gm);
             gm->firstTime = false;
-            
-            // lv_obj_set_parent(gm->guess_color->display->leftTop, gm->display->leftTop);
         }
         if (gm->previousState != gm->currentState)
         {
             gm->previousTick = current_tick;
-            if (lv_obj_is_valid(gm->display->leftTop)) {
-                lv_label_set_text(gm->display->leftTop, "New Text");
-            }
-            if (gm->display != NULL) {
-                printf("Clearing display\n");
-            } else {
+            if (gm->display == NULL) {
+                // printf("Clearing display\n");
                 printf("Display is NULL\n");
                 gm->display = display_init();
             }
@@ -93,7 +85,7 @@ void gm_update(gm_handle gm)
             gm->previousTick = current_tick;
             // break;
         }
-        gm->gameRunning = guess_color_play(gm->guess_color);
+        gm->gameRunning = guess_color_play(gm->guess_color); //Går in i valt spel
         if (gm->gameRunning)
         {
             gm->nextState = gm->currentState;
@@ -103,10 +95,7 @@ void gm_update(gm_handle gm)
             gm->nextState = GM_NONE;
             gm->gameRunning = false;
             gm->previousTick = current_tick;
-            // lv_obj_get_disp(gm->guess_color->display->disp);
-            // gm_free_games(gm);
-
-            // gm->display = display_init();
+            gm_free_games(gm);
         }
 
         break;
@@ -118,7 +107,7 @@ void gm_update(gm_handle gm)
                 char myScore[12];
                 snprintf(myScore, sizeof(myScore), "%d", gm->score);
                 // Börja här imorgon
-                printf("Highscore\n");
+                // printf("Highscore\n");
                 display_update_fullscreen(gm->display, "Highscore:", NULL, "1: Back", myScore, NULL, NULL);
                 gm->previousTick = current_tick;
             }
@@ -184,22 +173,19 @@ void gm_choise_one(int pin, void *arg)
 {
     gm_handle gm = (gm_handle)arg;
     gm->choise = 1;
-    printf("%d gm", gm->choise);
-    // h->currentState = GUESS_COLOR_GENERATE_NEW;
+    // printf("%d gm\n", gm->choise);
 }
 void gm_choise_two(int pin, void *arg)
 {
     gm_handle gm = (gm_handle)arg;
     gm->choise = 2;
-    printf("%d gm", gm->choise);
-    // h->lives--;
+    // printf("%d gm\n", gm->choise);
 }
 void gm_choise_three(int pin, void *arg)
 {
     gm_handle gm = (gm_handle)arg;
     gm->choise = 3;
-    printf("%d gm" , gm->choise);
-    // h->lives = 3;
+    // printf("%d gm\n" , gm->choise);
 }
 
 void gm_get_guess_highscore(gm_handle gm){
