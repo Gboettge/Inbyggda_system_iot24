@@ -43,6 +43,8 @@ typedef struct{
     lv_obj_t *rightTop;
     lv_obj_t *rightCenter;
     lv_obj_t *rightBottom;
+    esp_lcd_panel_handle_t panel_handle;
+    i2c_master_bus_config_t bus_config;
    
 }display_s;
 
@@ -63,3 +65,7 @@ void display_clear(display_s *display);
 
 void display_get_parent(display_s *display);
 void display_set_parent(display_s *display);
+
+void display_free(display_s *display);
+
+void display_recreate(display_s *display);

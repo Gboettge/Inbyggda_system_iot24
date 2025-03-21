@@ -5,6 +5,8 @@
 #include "RGB_led_component.h"
 #include "freertos/FreeRTOS.h"
 #include "guessTheColor.h"
+#include "esp_err.h"
+#include "esp_log.h"
 #define MAX_COLORS 9
 
 typedef enum{
@@ -26,6 +28,10 @@ typedef struct {
     b_led_handle bLedThree;
     guess_color_handle guess_color;
 
+    esp_lcd_panel_handle_t panel_handle;
+
+    lvgl_port_display_cfg_t disp_cfg;
+
     gm_state previousState;     
     gm_state currentState;
     gm_state nextState;     
@@ -36,6 +42,7 @@ typedef struct {
     int seconds;
     int choise;
     bool firstTime;
+    int colorCycle;
 } gm;
 
 typedef gm* gm_handle;
@@ -51,5 +58,7 @@ void gm_update(gm_handle gm);
 void gm_init_games(gm_handle gm);
 
 void gm_free_games(gm_handle gm);
+
+void gm_get_guess_highscore(gm_handle gm);
 
 

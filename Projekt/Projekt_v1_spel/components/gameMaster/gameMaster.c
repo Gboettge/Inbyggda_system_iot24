@@ -12,6 +12,8 @@ gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnT
     newGame->display = display;
     newGame->rgb = rgb;
 
+    newGame->display->bus_config.lp_source_clk = I2C_CLK_SRC_DEFAULT;
+
     newGame->guess_color = guess_color; //
 
     newGame->previousState = GM_CYCLE_COLORS;
@@ -21,6 +23,7 @@ gm_handle gm_init(button_handle btnOne, button_handle btnTwo, button_handle btnT
     newGame->seconds = MAX_COLORS;
     newGame->choise = 0;
     newGame->firstTime = true;
+    newGame->colorCycle = 0;
 
     
     return newGame;
@@ -35,7 +38,7 @@ void gm_update(gm_handle gm)
     {
         case GM_MENU:
         if(gm->firstTime){
-            gm_init_games(gm);
+            setRGB(gm->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
             button_setOnPressed(gm->btnOne, gm_choise_one, (void *)gm);
             button_setOnPressed(gm->btnTwo, gm_choise_two, (void *)gm);
             button_setOnPressed(gm->btnThree, gm_choise_three, (void *)gm);
@@ -51,16 +54,15 @@ void gm_update(gm_handle gm)
             }
             if (gm->display != NULL) {
                 printf("Clearing display\n");
-                // free(gm->display);
-                // display_init(gm->display);
-                // display_clear(gm->display); // Rensa displayen innan uppdatering
             } else {
                 printf("Display is NULL\n");
                 gm->display = display_init();
             }
-            display_update_fullscreen(gm->display, "Play", "Highscore", "Show RGB", NULL, NULL, NULL);
-            setRGB(gm->rgb, colors[gm->currentState].red, colors[gm->currentState].green, colors[gm->currentState].blue);
+            display_update_fullscreen(gm->display, "1: Play", "2: Highscore", "3: Show RGB", NULL, NULL, NULL);
             printf("Menu state\n ");
+            
+            printf("Display state: %p\n", gm->display);
+
             // break;
         }
         if (gm->choise != 0 && !gm->gameRunning)
@@ -102,7 +104,7 @@ void gm_update(gm_handle gm)
             gm->gameRunning = false;
             gm->previousTick = current_tick;
             // lv_obj_get_disp(gm->guess_color->display->disp);
-            gm_free_games(gm);
+            // gm_free_games(gm);
 
             // gm->display = display_init();
         }
@@ -112,12 +114,18 @@ void gm_update(gm_handle gm)
     case GM_HIGHSCORE:
         if (gm->previousState != gm->currentState)
         {
-            // Börja här imorgon
-            printf("Highscore\n");
-            display_update_fullscreen(gm->display, "Highscore:", NULL, "1: Back", "0", NULL, NULL);
-            gm->previousTick = current_tick;
-            // setRGB(gm->rgb, colors[gm->currentState].red, colors[gm->currentState].green, colors[gm->currentState].blue);
-            // break;
+            if(gm->score > 0){
+                char myScore[12];
+                snprintf(myScore, sizeof(myScore), "%d", gm->score);
+                // Börja här imorgon
+                printf("Highscore\n");
+                display_update_fullscreen(gm->display, "Highscore:", NULL, "1: Back", myScore, NULL, NULL);
+                gm->previousTick = current_tick;
+            }
+            else{
+                display_update_fullscreen(gm->display, "No hiscore", "Go play", "1: Back", NULL, NULL, NULL);
+
+            }
         }
         if (gm->choise == 1)
         {
@@ -130,13 +138,20 @@ void gm_update(gm_handle gm)
         }
         break;
     case GM_CYCLE_COLORS:
-        if (gm->previousState != gm->currentState)
-        {
-            display_update_fullscreen(gm->display, "COLOR", NULL, "1: Back", NULL, NULL, NULL);
+        if(current_tick - gm->previousTick >= pdMS_TO_TICKS(3000)){
+            setRGB(gm->rgb, colors[gm->colorCycle].red, colors[gm->colorCycle].green, colors[gm->colorCycle].blue);
+            display_update_fullscreen(gm->display, color_names[gm->colorCycle], NULL, "1: Back", NULL, NULL, NULL);
+            gm->colorCycle ++;
+            gm->previousTick = current_tick;
+            if (gm->colorCycle >= MAX_COLORS){
+                gm->colorCycle = 0;
+            }
         }
+
         if (gm->choise == 1)
         {
             gm->nextState = GM_MENU;
+            setRGB(gm->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
             gm->choise = 0;
         }
         else
@@ -145,11 +160,12 @@ void gm_update(gm_handle gm)
         }
         break;
     case GM_NONE:
-        gm->choise = 0;
-        gm->firstTime = true; //NY
-        // display_reset(gm->display);
-        gm->nextState = GM_MENU;
-    }
+    gm->choise = 0;
+    gm->firstTime = true;
+    gm_get_guess_highscore(gm);
+    display_recreate(gm->display);
+    gm->nextState = GM_MENU;
+}
     gm->previousState = gm->currentState;
     gm->currentState = gm->nextState;
 }
@@ -185,3 +201,74 @@ void gm_choise_three(int pin, void *arg)
     printf("%d gm" , gm->choise);
     // h->lives = 3;
 }
+
+void gm_get_guess_highscore(gm_handle gm){
+    int highscore = gm->guess_color->score;
+    printf("Prev score: %d\n", highscore);
+    if(highscore > gm->score){
+        gm->score = highscore;
+    }
+}
+// gammal GM_NONE
+// printf("GM_NONE Display state: %p\n", gm->display);
+// ESP_LOGI(TAG, "Trying to update display after returning to gameMaster...");
+// gm->display = gm->guess_color->display;
+// lv_disp_flush_ready(gm->display);
+// free(gm->guess_color->display);
+// free(gm->display->disp);
+// free(gm->display->leftTop);
+// free(gm->display->leftCenter);
+// free(gm->display->leftBottom);
+// free(gm->display->rightTop);
+// free(gm->display->rightCenter);
+// free(gm->display->rightBottom);
+
+// printf("Free success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+
+// gm->display = display_init();
+// printf("init success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+// if (lvgl_port_lock(0)) {
+//     // display_ui(disp);
+//     // Release the mutex
+    // lvgl_port_unlock();
+
+    //gm->disp_cfg.panel_handle = gm->panel_handle;
+
+// if (gm->display != NULL) {
+//     printf("Resetting display\n");
+//     esp_lcd_panel_reset(gm->display->panel_handle);
+//     esp_lcd_panel_init(gm->display->panel_handle);
+//     esp_lcd_panel_disp_on_off(gm->display->panel_handle, true);
+// } else {
+//     printf("Display is NULL\n");
+//     gm->display = display_init();
+// }
+
+// esp_lcd_panel_reset(gm->guess_color->display->panel_handle);
+// esp_lcd_panel_init(gm->display->panel_handle);
+// printf("Free success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+// esp_lcd_panel_disp_on_off(gm->display->panel_handle, true);
+// printf("Free success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+
+// display_free(gm->display);
+// printf("Free success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+// gm->display = display_init();
+// printf("init success\n");
+// vTaskDelay(pdMS_TO_TICKS(2000));
+
+// esp_lcd_panel_reset(gm->display);
+// esp_lcd_panel_init(gm->display);
+// esp_lcd_panel_disp_on_off(gm->display, true);
+
+
+// display_update(gm->guess_color->display, "Back in GameMaster!");
+// vTaskDelay(pdMS_TO_TICKS(5000));
+// printf("1\n");
+// display_update(gm->display, "Back in GameMaster!");
+// printf("2\n");
+// display_reset(gm->display);

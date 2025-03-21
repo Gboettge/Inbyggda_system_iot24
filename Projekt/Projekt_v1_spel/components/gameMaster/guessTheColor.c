@@ -14,6 +14,8 @@ guess_color_handle guess_color_init(button_handle btnOne, button_handle btnTwo, 
     newGame->previousState = GUESS_COLOR_GENERATE_NEW;
     newGame->currentState = GUESS_COLOR_START;
 
+    newGame->display->bus_config.lp_source_clk = 8;
+
     newGame->lives = 3;
     newGame->choise = 0;
     newGame->correctPlacement = -1;
@@ -42,21 +44,22 @@ bool guess_color_play(guess_color_handle g1)
         display_update_time(g1->display, myInt);
         if (g1->currentState == GUESS_COLOR_START)
         {
-            display_update_fullscreen(g1->display, "Wellcome", NULL, "Starts in:", NULL, NULL, myInt);
+            display_update_fullscreen(g1->display, "Welcome", NULL, "Starts in:", NULL, NULL, myInt);
+            printf("Display state: %p\n", g1->display);
             // display_ui(g1->display, "Wellcome", NULL, "Starts in:", NULL, myInt);
         }
         if (g1->currentState == GUESS_COLOR_TIMES_UP){
             display_update_fullscreen(g1->display, "Time's up!", "Score:", "Return in:", NULL, myScore, myInt);
         }
         if (g1->currentState == GUESS_COLOR_GAMEOVER){
-            display_update_fullscreen(g1->display, "Game Over 0 lives", "Score:", "Return in:", NULL, myScore, myInt);
+            display_update_fullscreen(g1->display, "Game Over", "Score:", "Return in:", NULL, myScore, myInt);
         }
     }
     syncLives(g1);
     // printf("1\n");
     switch (g1->currentState)
     {
-    case GUESS_COLOR_START:
+        case GUESS_COLOR_START:
         if (g1->previousState != g1->currentState)
         {
             // printf("state %d", g1->currentState);
@@ -65,12 +68,8 @@ bool guess_color_play(guess_color_handle g1)
             button_setOnPressed(g1->btnThree, button_choise_three, (void *)g1);
             setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
             g1->previousTick = currentTick;
-            // display_update(g1->display, "gameone start");
-
-            // setRGB(g1->rgb, colors[g1->currentState].red, colors[g1->currentState].green, colors[g1->currentState].blue);
-            // break;
         }
-
+        
         if (currentTick - g1->previousTick >= pdMS_TO_TICKS(STARTUP_DURATION))
         {
             g1->seconds = PLAY_TIME;
@@ -81,10 +80,9 @@ bool guess_color_play(guess_color_handle g1)
         {
             g1->nextState = g1->currentState;
         }
-        /* code */
         break;
-
-    case GUESS_COLOR_GAME:
+        
+        case GUESS_COLOR_GAME:
         if(g1->seconds <= 0){
             g1->nextState = GUESS_COLOR_TIMES_UP;
             break;
@@ -97,7 +95,8 @@ bool guess_color_play(guess_color_handle g1)
         }
         if (g1->choise != 0 && g1->isWaiting == true)
         {
-
+            setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
+            
             if (g1->correctPlacement != 0)
             {
                 char *answear;
@@ -197,18 +196,14 @@ bool guess_color_play(guess_color_handle g1)
             b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
             b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
             b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
+            printf("Display state: %p\n", g1->display);
             
             g1->seconds = STARTUP_DURATION / 1000;
-            
-            // setRGB(g1->rgb, colors[g1->currentState].red, colors[g1->currentState].green, colors[g1->currentState].blue);
             g1->previousTick = currentTick;
-            // break;
         }
         if (currentTick - g1->previousTick >= pdMS_TO_TICKS(STARTUP_DURATION))
         {
-            display_clear(g1->display);
-            g1->isGame = false;
-            g1->nextState = GUESS_COLOR_START;
+            g1->nextState = GUESS_COLOR_END;
             g1->previousTick = currentTick;
         }
         else
@@ -220,25 +215,27 @@ bool guess_color_play(guess_color_handle g1)
         if (g1->previousState != g1->currentState)
         {
             g1->seconds = STARTUP_DURATION / 1000;
-            
-            setRGB(g1->rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
-            // b_led_blink(g1->bLedOne, 300, 300);
-            // b_led_blink(g1->bLedTwo, 300, 300);
-            // b_led_blink(g1->bLedThree, 300, 300);
+            b_led_setled(g1->bLedOne, BL_LIGHT_OFF);
+            b_led_setled(g1->bLedTwo, BL_LIGHT_OFF);
+            b_led_setled(g1->bLedThree, BL_LIGHT_OFF);
+            printf("Display state: %p\n", g1->display);
             g1->previousTick = currentTick;
-            // break;
+           
         }
         if (currentTick - g1->previousTick >= pdMS_TO_TICKS(STARTUP_DURATION))
         {
-            display_clear(g1->display);
-            g1->isGame = false;
-            g1->nextState = GUESS_COLOR_START;
             g1->previousTick = currentTick;
+            g1->nextState = GUESS_COLOR_END;
         }
         else
         {
             g1->nextState = g1->currentState;
         }
+        break;
+        case GUESS_COLOR_END:
+        display_clear(g1->display);
+        g1->nextState = GUESS_COLOR_START;
+        g1->isGame = false;
         break;
     }
     g1->previousState = g1->currentState;

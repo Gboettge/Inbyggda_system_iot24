@@ -45,7 +45,7 @@ void app_main(void)
         b_led_update(bLedOne);
         b_led_update(bLedTwo);
         b_led_update(bLedThree);
-        vTaskDelay(pdMS_TO_TICKS(30));
+        vTaskDelay(pdMS_TO_TICKS(40));
         // setRGB(rgb, colors[OFF].red, colors[OFF].green, colors[OFF].blue);
     }
 }

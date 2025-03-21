@@ -6,14 +6,15 @@
 #include "freertos/FreeRTOS.h"
 #define COLOR_SIZE 9
 #define PLAY_TIME 60
-#define STARTUP_DURATION 8000
+#define STARTUP_DURATION 6000
 
 typedef enum{
     GUESS_COLOR_START,
     GUESS_COLOR_GAME,
+    GUESS_COLOR_GENERATE_NEW,
     GUESS_COLOR_GAMEOVER,
     GUESS_COLOR_TIMES_UP,
-    GUESS_COLOR_GENERATE_NEW
+    GUESS_COLOR_END
 }guess_state;
 
 typedef struct {

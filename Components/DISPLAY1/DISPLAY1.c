@@ -72,6 +72,7 @@ display_s *display_init(){
         lv_disp_set_rotation(disp, LV_DISP_ROT_NONE);
         display_s *newDisp =pvPortMalloc(sizeof(display_s));
         newDisp->disp = disp;
+        newDisp->panel_handle = panel_handle;
         
     /* Rotation of the screen */
 
@@ -281,6 +282,45 @@ void display_get_parent(display_s *display){
 }
 void display_set_parent(display_s *display){
     
+}
+
+void display_free(display_s *display){
+    free(display);
+
+}
+
+void display_recreate(display_s *display){
+    lv_obj_t *scr = lv_disp_get_scr_act(display->disp);
+
+    display->leftTop = lv_label_create(scr);
+    lv_label_set_long_mode(display->leftTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->leftTop, display->disp->driver->hor_res * 4 / 5);
+    lv_obj_align(display->leftTop, LV_ALIGN_TOP_LEFT, 0, 0);
+
+    display->leftCenter = lv_label_create(scr);
+    lv_label_set_long_mode(display->leftCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->leftCenter, display->disp->driver->hor_res * 4 / 5);
+    lv_obj_align(display->leftCenter, LV_ALIGN_LEFT_MID, 0, 0);
+
+    display->leftBottom = lv_label_create(scr);
+    lv_label_set_long_mode(display->leftBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->leftBottom, display->disp->driver->hor_res * 4 / 5);
+    lv_obj_align(display->leftBottom, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+
+    display->rightTop = lv_label_create(scr);
+    lv_label_set_long_mode(display->rightTop, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->rightTop, display->disp->driver->hor_res / 5);
+    lv_obj_align(display->rightTop, LV_ALIGN_TOP_RIGHT, 0, 0);
+
+    display->rightCenter = lv_label_create(scr);
+    lv_label_set_long_mode(display->rightCenter, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->rightCenter, display->disp->driver->hor_res / 5);
+    lv_obj_align(display->rightCenter, LV_ALIGN_RIGHT_MID, 0, 0);
+
+    display->rightBottom = lv_label_create(scr);
+    lv_label_set_long_mode(display->rightBottom, LV_LABEL_LONG_SCROLL); /* Circular scroll */
+    lv_obj_set_width(display->rightBottom, display->disp->driver->hor_res / 5);
+    lv_obj_align(display->rightBottom, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 }
 // lv_obj_t *label = lv_label_create(scr);
 // lv_obj_t *label1 = lv_label_create(scr);
